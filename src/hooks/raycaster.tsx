@@ -4,14 +4,15 @@ import * as THREE from "three";
 import { Intersection } from "three";
 
 type RolloverPosition = {
-    x: number,
-    y: number,
-    z: number
+  x: number;
+  y: number;
+  z: number;
 };
 
 export const useRolloverPosition = (
   ref: React.RefObject<any>,
-  references: any[]
+  references: any[],
+  mode: "Draw" | "Pick"
 ) => {
   const { raycaster, mouse, camera } = useThree();
 

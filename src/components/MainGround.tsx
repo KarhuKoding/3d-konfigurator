@@ -11,9 +11,8 @@ type Block = {
   ref: React.RefObject<any>;
 };
 
-function MainGround(props: { picker: string }) {
+function MainGround(props: { picker: string, mode: "Draw" | "Pick" }) {
   const mainRef = useRef(null);
-  const boxRef = useRef(null);
   const rolloverRef = useRef(null);
 
   const [blocks, setBlocks] = useState<Block[]>([]);
@@ -25,7 +24,13 @@ function MainGround(props: { picker: string }) {
     mainRef.current,
   ];
 
-  const { rolloverPosition } = useRolloverPosition(rolloverRef, references);
+  // TODO refactor Rollover Stuff into own component
+
+  const { rolloverPosition } = useRolloverPosition(
+    rolloverRef,
+    references,
+    props.mode
+  );
 
   useEffect(() => {
     if (clicked) {

@@ -36,14 +36,14 @@ export const useRolloverPosition = (
         setIntersect(intersect);
 
         let rolloverBox = ref.current;
-        let [width, height, depth] = [0.5, 0.5, 0.5];
+        let [width, height, depth] = [1, 0.5, 1];
 
         intersect.point.y = Math.round(Math.abs(intersect.point.y));
-        console.log(intersect.point.y);
 
         rolloverBox.position.copy(intersect.point);
 
         // https://gamedev.stackexchange.com/questions/33140/how-can-i-snap-a-game-objects-position-to-a-grid=
+        // https://github.com/mrdoob/three.js/blob/master/examples/webgl_interactive_voxelpainter.html
         rolloverBox.position
           .divide(new THREE.Vector3(width, height, depth))
           .floor()
@@ -84,12 +84,12 @@ function MainGround() {
       <gridHelper></gridHelper>
 
       {/* Box */}
-      <mesh ref={boxRef} position={[0.5, 0.5, 0.5]}>
+      <mesh ref={boxRef} position={[0, 0.5, 0]}>
         <boxGeometry args={[1, 1, 1]} />
         <meshStandardMaterial color={"orange"} />
       </mesh>
       {/* Rollover */}
-      <mesh ref={rolloverRef} position={[0.5, 0.5, 0.5]}>
+      <mesh ref={rolloverRef} position={[0, 0.5, 0]}>
         <boxGeometry args={[1, 1, 1]} />
         <meshStandardMaterial color={"blue"} />
       </mesh>

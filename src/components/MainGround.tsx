@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useThree } from "@react-three/fiber";
 import * as THREE from "three";
-import { Mesh, Intersection } from "three";
+import { useThree } from "@react-three/fiber";
+import { Intersection } from "three";
 
 export const useRolloverPosition = (
   ref: React.RefObject<any>,
@@ -65,7 +65,7 @@ export const useRolloverPosition = (
   };
 };
 
-function MainGround() {
+function MainGround(props: { picker: string }) {
   const mainRef = useRef(null);
   const boxRef = useRef(null);
   const rolloverRef = useRef(null);
@@ -74,6 +74,10 @@ function MainGround() {
     mainRef.current,
     boxRef.current,
   ]);
+
+  useEffect(() => {
+    console.log("picker", props.picker);
+  }, [props.picker]);
 
   return (
     <>
@@ -88,11 +92,18 @@ function MainGround() {
         <boxGeometry args={[1, 1, 1]} />
         <meshStandardMaterial color={"orange"} />
       </mesh>
-      {/* Rollover */}
-      <mesh ref={rolloverRef} position={[0, 0.5, 0]}>
-        <boxGeometry args={[1, 1, 1]} />
-        <meshStandardMaterial color={"blue"} />
-      </mesh>
+
+      {props.picker === "box" ? (
+        <mesh ref={rolloverRef} position={[0, 0.5, 0]}>
+          <boxGeometry args={[1, 1, 1]} />
+          <meshStandardMaterial color={"blue"} />
+        </mesh>
+      ) : (
+        <mesh ref={rolloverRef} position={[0, 0.5, 0]}>
+          <boxGeometry args={[1, 1, 2]} />
+          <meshStandardMaterial color={"cyan"} />
+        </mesh>
+      )}
     </>
   );
 }

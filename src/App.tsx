@@ -1,7 +1,7 @@
 import { Canvas } from "@react-three/fiber";
 import { useCallback, useState } from "react";
 import SelectionWheel from "./components/selectionwheel";
-import MeshPicker from "./components/MeshPicker";
+import { MeshPicker } from "./components/MeshPicker";
 import { useEventListener } from "./useEventListener";
 import MainGround from "./components/MainGround";
 import { OrbitControls } from "@react-three/drei";
@@ -11,6 +11,8 @@ import "./index.scss";
 function App() {
   const [showOverlay, setShowOverlay] = useState(false);
   const [selection, setSelection] = useState(null);
+
+  const [picker, setPicker] = useState("box");
 
   const playAudio = () => {
     if (selection === null) return;
@@ -72,12 +74,12 @@ function App() {
         <section className="sidebarWrapper">
           <h2>Sidebar</h2>
           <hr />
-          <MeshPicker />
+          <MeshPicker setPicker={setPicker} picker={picker} />
         </section>
         <section className="canvasWrapper">
           <Canvas>
             <pointLight position={[10, 10, 10]} />
-            <MainGround />
+            <MainGround picker={picker} />
             <OrbitControls></OrbitControls>
           </Canvas>
         </section>

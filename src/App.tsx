@@ -1,6 +1,7 @@
 import { Canvas } from "@react-three/fiber";
 import { useCallback, useState } from "react";
 import SelectionWheel from "./components/selectionwheel";
+import MeshPicker from "./components/MeshPicker";
 import { useEventListener } from "./useEventListener";
 import MainGround from "./components/MainGround";
 import { OrbitControls } from "@react-three/drei";
@@ -60,18 +61,26 @@ function App() {
   return (
     <>
       <div className="App">
-        {showOverlay ? (
+        {/* {showOverlay ? (
           <SelectionWheel onSelected={setSelection} />
         ) : (
           <div style={{ position: "absolute" }}>
             <h3>Please Press KeyE</h3>
           </div>
-        )}
-        <Canvas>
-          <pointLight position={[10, 10, 10]} />
-          <MainGround />
-           <OrbitControls></OrbitControls> 
-        </Canvas>
+        )} */}
+
+        <section className="sidebarWrapper">
+          <h2>Sidebar</h2>
+          <hr />
+          <MeshPicker />
+        </section>
+        <section className="canvasWrapper">
+          <Canvas>
+            <pointLight position={[10, 10, 10]} />
+            <MainGround />
+            <OrbitControls></OrbitControls>
+          </Canvas>
+        </section>
       </div>
     </>
   );

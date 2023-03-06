@@ -70,7 +70,7 @@ function App() {
         <Canvas>
           <pointLight position={[10, 10, 10]} />
           <MainGround />
-          <OrbitControls></OrbitControls>
+           <OrbitControls></OrbitControls> 
         </Canvas>
       </div>
     </>

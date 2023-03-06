@@ -17,17 +17,30 @@ export const useRolloverPosition = (
   const [intersect, setIntersect] = useState<Intersection | null>(null);
 
   useEffect(() => {
-    // Exit early if references contain an undefined value
-    if (references[0] === undefined) {
-      return;
-    }
-
     const setRolloverPosition = () => {
-      raycaster.setFromCamera(mouse.clone(), camera);
+      // Exit early if references contain an undefined value
+      if (references[0] === undefined) {
+        return;
+      }
 
+      if (ref.current === null) {
+        console.warn("No component set for rollover brick");
+        return;
+      }
+
+      raycaster.setFromCamera(mouse.clone(), camera);
       let intersects = raycaster.intersectObjects(references, true);
 
-      console.log(intersects);
+      if (intersects.length > 0) {
+        let intersect = intersects[0];
+        setIntersect(intersect);
+
+        let rolloverBox = ref.current;
+        intersect.point.y = Math.round(Math.abs(intersect.point.y)) + 0.5;
+        console.log(intersect.point.y);
+
+        rolloverBox.position.copy(intersect.point);
+      }
     };
 
     window.addEventListener("mousemove", setRolloverPosition);
@@ -44,22 +57,31 @@ export const useRolloverPosition = (
 function MainGround() {
   const mainRef = useRef(null);
   const boxRef = useRef(null);
+  const rolloverRef = useRef(null);
 
-  const { rolloverPosition } = useRolloverPosition(mainRef, [mainRef.current]);
+  const { rolloverPosition } = useRolloverPosition(rolloverRef, [
+    mainRef.current,
+    boxRef.current,
+  ]);
 
   return (
     <>
-      <mesh rotation={[-Math.PI / 2, 0, 0]} ref={mainRef}>
+      <mesh rotation={[-Math.PI / 2, 0, 0]} ref={mainRef} position={[0, 0, 0]}>
         <planeGeometry attach="geometry" args={[10, 10]} />
         <meshBasicMaterial attach="material" />
       </mesh>
+      <gridHelper></gridHelper>
 
       {/* Box */}
-      <mesh>
-        <boxGeometry args={[1, 1, 1]} ref={boxRef} />
+      <mesh ref={boxRef} position={[0, 0.5, 0]}>
+        <boxGeometry args={[1, 1, 1]} />
         <meshStandardMaterial color={"orange"} />
       </mesh>
-      <gridHelper />
+      {/* Rollover */}
+      <mesh ref={rolloverRef} position={[0, 0.5, 0]}>
+        <boxGeometry args={[1, 1, 1]} />
+        <meshStandardMaterial color={"blue"} />
+      </mesh>
     </>
   );
 }

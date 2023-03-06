@@ -1,9 +1,8 @@
-import React, { useState } from "react";
-
 export const MeshPicker = (props: { setPicker: any; picker: string }) => {
   const handleClick = (el: string) => {
     props.setPicker(el);
   };
+
   return (
     <ul>
       <li

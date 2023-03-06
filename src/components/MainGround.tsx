@@ -1,67 +1,12 @@
-import React, { useState, useEffect, useRef } from "react";
-import * as THREE from "three";
-import { useThree } from "@react-three/fiber";
-import { Intersection } from "three";
+import { useRef, useEffect, useState } from "react";
+import { useMouseDown } from "../hooks/mouse";
+import { useRolloverPosition } from "../hooks/raycaster";
 
-export const useRolloverPosition = (
-  ref: React.RefObject<any>,
-  references: any[]
-) => {
-  const { raycaster, mouse, camera } = useThree();
-
-  const [rolloverPosition, setRollover] = useState<any>({
-    x: 0,
-    y: 0,
-    z: 0,
-  });
-  const [intersect, setIntersect] = useState<Intersection | null>(null);
-
-  useEffect(() => {
-    const setRolloverPosition = () => {
-      // Exit early if references contain an undefined value
-      if (references[0] === undefined) {
-        return;
-      }
-
-      if (ref.current === null) {
-        console.warn("No component set for rollover brick");
-        return;
-      }
-
-      raycaster.setFromCamera(mouse.clone(), camera);
-      let intersects = raycaster.intersectObjects(references, true);
-
-      if (intersects.length > 0) {
-        let intersect = intersects[0];
-        setIntersect(intersect);
-
-        let rolloverBox = ref.current;
-        let [width, height, depth] = [1, 0.5, 1];
-
-        intersect.point.y = Math.round(Math.abs(intersect.point.y));
-
-        rolloverBox.position.copy(intersect.point);
-
-        // https://gamedev.stackexchange.com/questions/33140/how-can-i-snap-a-game-objects-position-to-a-grid=
-        // https://github.com/mrdoob/three.js/blob/master/examples/webgl_interactive_voxelpainter.html
-        rolloverBox.position
-          .divide(new THREE.Vector3(width, height, depth))
-          .floor()
-          .multiply(new THREE.Vector3(width, height, depth))
-          .add(new THREE.Vector3(width, height, depth));
-
-        setRollover(rolloverBox.position);
-      }
-    };
-
-    window.addEventListener("mousemove", setRolloverPosition);
-    return () => {
-      window.removeEventListener("mousemove", setRolloverPosition);
-    };
-  });
-
-  return {
-    rolloverPosition: rolloverPosition,
+type Block = {
+  position: {
+    x: number;
+    y: number;
+    z: number;
   };
 };
 
@@ -70,14 +15,24 @@ function MainGround(props: { picker: string }) {
   const boxRef = useRef(null);
   const rolloverRef = useRef(null);
 
+  const [blocks, setBlocks] = useState<Block[]>([]);
+
   const { rolloverPosition } = useRolloverPosition(rolloverRef, [
     mainRef.current,
     boxRef.current,
   ]);
+  const clicked = useMouseDown();
 
   useEffect(() => {
-    console.log("picker", props.picker);
-  }, [props.picker]);
+    if (clicked) {
+      const newBlock = {
+        position: { ...rolloverPosition },
+      };
+
+      setBlocks([...blocks, newBlock]);
+      console.log(blocks);
+    }
+  }, [clicked]);
 
   return (
     <>
@@ -93,7 +48,20 @@ function MainGround(props: { picker: string }) {
         <meshStandardMaterial color={"orange"} />
       </mesh>
 
-      {props.picker === "box" ? (
+      <mesh ref={rolloverRef} position={[0, 0.5, 0]}>
+        <boxGeometry args={[1, 1, 1]} />
+        <meshStandardMaterial color={"blue"} />
+      </mesh>
+
+      {blocks.map(({ position }) => {
+        return (
+          <mesh position={[position.x, position.y, position.z]}>
+            <boxGeometry args={[1, 1, 1]} />
+            <meshStandardMaterial color={"blue"} />
+          </mesh>
+        );
+      })}
+      {/* {props.picker === "box" ? (
         <mesh ref={rolloverRef} position={[0, 0.5, 0]}>
           <boxGeometry args={[1, 1, 1]} />
           <meshStandardMaterial color={"blue"} />
@@ -103,7 +71,7 @@ function MainGround(props: { picker: string }) {
           <boxGeometry args={[1, 1, 2]} />
           <meshStandardMaterial color={"cyan"} />
         </mesh>
-      )}
+      )} */}
     </>
   );
 }

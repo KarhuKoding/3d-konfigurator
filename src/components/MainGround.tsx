@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, createRef } from "react";
 import { useMouseDown } from "../hooks/mouse";
 import { useRolloverPosition } from "../hooks/raycaster";
 
@@ -8,6 +8,7 @@ type Block = {
     y: number;
     z: number;
   };
+  ref: React.RefObject<any>;
 };
 
 function MainGround(props: { picker: string }) {
@@ -17,20 +18,25 @@ function MainGround(props: { picker: string }) {
 
   const [blocks, setBlocks] = useState<Block[]>([]);
 
-  const { rolloverPosition } = useRolloverPosition(rolloverRef, [
-    mainRef.current,
-    boxRef.current,
-  ]);
   const clicked = useMouseDown();
+
+  const references = [
+    ...blocks.filter(({ ref }) => ref.current).map(({ ref }) => ref.current),
+    mainRef.current,
+  ];
+
+  const { rolloverPosition } = useRolloverPosition(rolloverRef, references);
 
   useEffect(() => {
     if (clicked) {
-      const newBlock = {
-        position: { ...rolloverPosition },
-      };
+      setTimeout(() => {
+        const newBlock = {
+          position: { ...rolloverPosition },
+          ref: createRef(),
+        };
 
-      setBlocks([...blocks, newBlock]);
-      console.log(blocks);
+        setBlocks([...blocks, newBlock]);
+      }, 50);
     }
   }, [clicked]);
 
@@ -42,20 +48,18 @@ function MainGround(props: { picker: string }) {
       </mesh>
       <gridHelper></gridHelper>
 
-      {/* Box */}
-      <mesh ref={boxRef} position={[0, 0.5, 0]}>
-        <boxGeometry args={[1, 1, 1]} />
-        <meshStandardMaterial color={"orange"} />
-      </mesh>
-
       <mesh ref={rolloverRef} position={[0, 0.5, 0]}>
         <boxGeometry args={[1, 1, 1]} />
         <meshStandardMaterial color={"blue"} />
       </mesh>
 
-      {blocks.map(({ position }) => {
+      {blocks.map(({ position, ref }, id) => {
         return (
-          <mesh position={[position.x, position.y, position.z]}>
+          <mesh
+            position={[position.x, position.y, position.z]}
+            ref={ref}
+            key={id}
+          >
             <boxGeometry args={[1, 1, 1]} />
             <meshStandardMaterial color={"blue"} />
           </mesh>

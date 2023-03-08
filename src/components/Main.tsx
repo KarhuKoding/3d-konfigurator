@@ -55,18 +55,19 @@ function Main() {
   );
 
   useEffect(() => {
-    // if (clicked && snap.mode === eMode.DRAW) {
-    //   setTimeout(() => {
-    //     const newBlock = {
-    //       position: { ...rolloverPosition },
-    //       ref: createRef(),
-    //       selected: false,
-    //       blockId: blocks.length + 1,
-    //     };
+    if (clicked && snap.mode === eMode.DRAW) {
+      setTimeout(() => {
+        const newBlock = {
+          position: { ...rolloverPosition },
+          ref: createRef(),
+          selected: false,
+          blockId: blocks.length + 1,
+        };
 
-    //     setBlocks([...blocks, newBlock]);
-    //   }, 50);
-    // }
+        setBlocks([...blocks, newBlock]);
+        state.mode = eMode.IDLE;
+      }, 50);
+    }
     if (clicked && snap.mode === eMode.PICK) {
       // TODO add case for relocate an Item
       const newState = blocks.map((block) => {

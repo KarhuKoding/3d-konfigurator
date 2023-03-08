@@ -31,40 +31,36 @@ export const useRolloverPosition = (
         return;
       }
 
-      if (ref.current === null && mode === eMode.DRAW) {
+      // RolloverRef
+      if (ref.current === null) {
         console.warn("No component set for rollover brick");
         return;
       }
 
       raycaster.setFromCamera(mouse.clone(), camera);
       let intersects = raycaster.intersectObjects(references, true);
+      console.log(intersects);
 
       if (intersects.length > 0) {
         let intersect = intersects[0];
         setIntersect(intersect);
 
-        if (mode === eMode.DRAW) {
-          let rolloverBox = ref.current;
-          let [width, height, depth] = [1, 0.5, 1];
+        let rolloverBox = ref.current;
+        let [width, height, depth] = [1, 0.5, 1];
 
-          intersect.point.y = Math.round(Math.abs(intersect.point.y));
+        intersect.point.y = Math.round(Math.abs(intersect.point.y));
+     
+        rolloverBox.position.copy(intersect.point);
 
-          rolloverBox.position.copy(intersect.point);
+        // https://gamedev.stackexchange.com/questions/33140/how-can-i-snap-a-game-objects-position-to-a-grid=
+        // https://github.com/mrdoob/three.js/blob/master/examples/webgl_interactive_voxelpainter.html
+        rolloverBox.position
+          .divide(new THREE.Vector3(width, height, depth))
+          .floor()
+          .multiply(new THREE.Vector3(width, height, depth))
+          .add(new THREE.Vector3(width, height, depth));
 
-          // https://gamedev.stackexchange.com/questions/33140/how-can-i-snap-a-game-objects-position-to-a-grid=
-          // https://github.com/mrdoob/three.js/blob/master/examples/webgl_interactive_voxelpainter.html
-          rolloverBox.position
-            .divide(new THREE.Vector3(width, height, depth))
-            .floor()
-            .multiply(new THREE.Vector3(width, height, depth))
-            .add(new THREE.Vector3(width, height, depth));
-
-          setRollover(rolloverBox.position);
-        }
-
-        if (mode === eMode.PICK) {
-          console.log("PickMode", intersect);
-        }
+        setRollover(rolloverBox.position);
       }
     };
 

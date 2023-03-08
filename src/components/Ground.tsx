@@ -1,4 +1,5 @@
 import * as React from "react";
+import { BufferGeometry, Mesh, Material } from "three";
 
 interface Props {}
 type Ref = any;

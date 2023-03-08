@@ -31,6 +31,7 @@ const ModeForm = () => {
   const snap = useSnapshot(state);
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.stopPropagation();
     const val = e.target.value as tMode;
     state.mode = val;
   };

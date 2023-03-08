@@ -7,14 +7,11 @@ export type tBlock = {
     z: number;
   };
   ref: React.RefObject<any>;
+  selected: Boolean;
+  blockId: number;
 };
 
 export type tPick = "BOX" | "BOX_LARGE";
-
-export type State = {
-  mode: tMode;
-  pick: tPick;
-};
 
 // ENUMS
 

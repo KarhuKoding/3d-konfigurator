@@ -2,7 +2,7 @@ import { useThree } from "@react-three/fiber";
 import React, { useEffect, useState } from "react";
 import * as THREE from "three";
 import { Intersection } from "three";
-import { tMode } from "../types";
+import { eMode, tMode } from "../types";
 
 type RolloverPosition = {
   x: number;
@@ -31,7 +31,7 @@ export const useRolloverPosition = (
         return;
       }
 
-      if (ref.current === null) {
+      if (ref.current === null && mode === eMode.DRAW) {
         console.warn("No component set for rollover brick");
         return;
       }
@@ -43,22 +43,28 @@ export const useRolloverPosition = (
         let intersect = intersects[0];
         setIntersect(intersect);
 
-        let rolloverBox = ref.current;
-        let [width, height, depth] = [1, 0.5, 1];
+        if (mode === eMode.DRAW) {
+          let rolloverBox = ref.current;
+          let [width, height, depth] = [1, 0.5, 1];
 
-        intersect.point.y = Math.round(Math.abs(intersect.point.y));
+          intersect.point.y = Math.round(Math.abs(intersect.point.y));
 
-        rolloverBox.position.copy(intersect.point);
+          rolloverBox.position.copy(intersect.point);
 
-        // https://gamedev.stackexchange.com/questions/33140/how-can-i-snap-a-game-objects-position-to-a-grid=
-        // https://github.com/mrdoob/three.js/blob/master/examples/webgl_interactive_voxelpainter.html
-        rolloverBox.position
-          .divide(new THREE.Vector3(width, height, depth))
-          .floor()
-          .multiply(new THREE.Vector3(width, height, depth))
-          .add(new THREE.Vector3(width, height, depth));
+          // https://gamedev.stackexchange.com/questions/33140/how-can-i-snap-a-game-objects-position-to-a-grid=
+          // https://github.com/mrdoob/three.js/blob/master/examples/webgl_interactive_voxelpainter.html
+          rolloverBox.position
+            .divide(new THREE.Vector3(width, height, depth))
+            .floor()
+            .multiply(new THREE.Vector3(width, height, depth))
+            .add(new THREE.Vector3(width, height, depth));
 
-        setRollover(rolloverBox.position);
+          setRollover(rolloverBox.position);
+        }
+
+        if (mode === eMode.PICK) {
+          console.log("PickMode", intersect);
+        }
       }
     };
 

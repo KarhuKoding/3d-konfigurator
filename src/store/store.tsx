@@ -2,7 +2,7 @@ import { proxy } from "valtio";
 import { State, eMode, ePick } from "../types";
 
 const initState: State = {
-  mode: eMode.DRAW,
+  mode: eMode.PICK,
   pick: ePick.BOX,
 };
 

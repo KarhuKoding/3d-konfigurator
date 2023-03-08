@@ -7,13 +7,19 @@ import { useRolloverPosition } from "../hooks/raycaster";
 import { Block } from "./Block";
 import { RolloverBlock } from "./RolloverBlock";
 import { Ground } from "./Ground";
-import { tBlock } from "../types";
+import { eMode, tBlock } from "../types";
+
+// TODO create initBlocks for Testing purposes
+const initBlocks: tBlock[] = [
+  { position: { x: 1, y: 1, z: 1 }, ref: createRef() },
+  { position: { x: 2, y: 1, z: 3 }, ref: createRef() },
+];
 
 function Main() {
   const snap = useSnapshot(state);
-  
-  const [blocks, setBlocks] = useState<tBlock[]>([]);
-  
+
+  const [blocks, setBlocks] = useState<tBlock[]>([...initBlocks]);
+
   const mainRef = useRef(null);
   const rolloverRef = useRef(null);
   const clicked = useMouseDown();
@@ -44,7 +50,9 @@ function Main() {
   return (
     <>
       <Ground ref={mainRef}></Ground>
-      <RolloverBlock ref={rolloverRef}></RolloverBlock>
+      {snap.mode === eMode.DRAW && (
+        <RolloverBlock ref={rolloverRef}></RolloverBlock>
+      )}
 
       {blocks.map(({ position, ref }, id) => {
         return (

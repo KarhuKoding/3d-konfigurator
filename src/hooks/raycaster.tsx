@@ -39,7 +39,6 @@ export const useRolloverPosition = (
 
       raycaster.setFromCamera(mouse.clone(), camera);
       let intersects = raycaster.intersectObjects(references, true);
-      console.log(intersects);
 
       if (intersects.length > 0) {
         let intersect = intersects[0];
@@ -49,7 +48,7 @@ export const useRolloverPosition = (
         let [width, height, depth] = [1, 0.5, 1];
 
         intersect.point.y = Math.round(Math.abs(intersect.point.y));
-     
+
         rolloverBox.position.copy(intersect.point);
 
         // https://gamedev.stackexchange.com/questions/33140/how-can-i-snap-a-game-objects-position-to-a-grid=

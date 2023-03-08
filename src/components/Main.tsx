@@ -19,9 +19,9 @@ const initBlocks: tBlock[] = [
     blockId: 0,
   },
   {
-    position: { x: 0, y: 1, z: 0 },
+    position: { x: 2, y: 0.5, z: 0 },
     ref: createRef(),
-    selected: true,
+    selected: false,
     blockId: 1,
   },
 ];
@@ -66,6 +66,15 @@ function Main() {
         setBlocks([...blocks, newBlock]);
       }, 50);
     }
+    if (clicked && snap.mode === eMode.PICK) {
+      // TODO add case for relocate an Item
+      console.log("relocate Picked item");
+      // const newState = blocks.map((block) => {
+      //   return { ...block, selected: false };
+      // });
+      // setBlocks(newState);
+      // state.mode = eMode.DRAW;
+    }
   }, [clicked]);
 
   const handleStateFromBlock = (id: any) => {
@@ -77,6 +86,7 @@ function Main() {
       });
       setBlocks(newState);
     }
+    state.mode = eMode.DRAW;
   };
 
   return (
@@ -94,7 +104,7 @@ function Main() {
             ref={ref}
             key={id}
             color="blue"
-            liftState={handleStateFromBlock}
+            clickedBlock={handleStateFromBlock}
             blockId={blockId}
           />
         );

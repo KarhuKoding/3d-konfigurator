@@ -3,7 +3,7 @@ import { useCallback, useState } from "react";
 import SelectionWheel from "./components/selectionwheel";
 import { MeshPicker } from "./components/MeshPicker";
 import { useEventListener } from "./useEventListener";
-import MainGround from "./components/MainGround";
+import MainGround from "./components/Main";
 import { OrbitControls } from "@react-three/drei";
 
 import "./index.scss";

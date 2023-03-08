@@ -2,6 +2,8 @@ import { useRef, useEffect, useState, createRef } from "react";
 import { useMouseDown } from "../hooks/mouse";
 import { useRolloverPosition } from "../hooks/raycaster";
 import { Block } from "./Block";
+import { RolloverBlock } from "./RolloverBlock";
+import { Ground } from "./Ground";
 import { tBlock } from "../types";
 
 function MainGround(props: { picker: string; mode: "Draw" | "Pick" }) {
@@ -39,17 +41,9 @@ function MainGround(props: { picker: string; mode: "Draw" | "Pick" }) {
 
   return (
     <>
-      <mesh rotation={[-Math.PI / 2, 0, 0]} ref={mainRef} position={[0, 0, 0]}>
-        <planeGeometry attach="geometry" args={[10, 10]} />
-        <meshBasicMaterial attach="material" />
-      </mesh>
-      <gridHelper></gridHelper>
-
-      <mesh ref={rolloverRef} position={[0, 0.5, 0]}>
-        <boxGeometry args={[1, 1, 1]} />
-        <meshStandardMaterial color={"blue"} />
-      </mesh>
-
+      <Ground ref={mainRef}></Ground>
+      <RolloverBlock ref={rolloverRef}></RolloverBlock>
+      
       {blocks.map(({ position, ref }, id) => {
         return (
           <Block
@@ -59,17 +53,6 @@ function MainGround(props: { picker: string; mode: "Draw" | "Pick" }) {
           />
         );
       })}
-      {/* {props.picker === "box" ? (
-        <mesh ref={rolloverRef} position={[0, 0.5, 0]}>
-          <boxGeometry args={[1, 1, 1]} />
-          <meshStandardMaterial color={"blue"} />
-        </mesh>
-      ) : (
-        <mesh ref={rolloverRef} position={[0, 0.5, 0]}>
-          <boxGeometry args={[1, 1, 2]} />
-          <meshStandardMaterial color={"cyan"} />
-        </mesh>
-      )} */}
     </>
   );
 }

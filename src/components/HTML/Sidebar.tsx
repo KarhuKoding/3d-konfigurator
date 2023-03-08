@@ -41,6 +41,16 @@ const ModeForm = () => {
       <label>
         <input
           type="radio"
+          name={eMode.IDLE}
+          value={eMode.IDLE}
+          checked={snap.mode === eMode.IDLE}
+          onChange={handleOnChange}
+        />
+        IDLE
+      </label>
+      <label>
+        <input
+          type="radio"
           name={eMode.DRAW}
           value={eMode.DRAW}
           checked={snap.mode === eMode.DRAW}

@@ -1,6 +1,7 @@
 import React, { useEffect, useState, createRef } from "react";
 import { useSnapshot } from "valtio";
 import { state } from "../store/store";
+import { eMode } from "../types";
 
 interface Props {
   position: [x: number, y: number, z: number];
@@ -17,16 +18,26 @@ export const Block = React.forwardRef<Ref, Props>(
     const [hovered, setHover] = useState<null | Boolean>(null);
 
     const handeClick = () => {
-      clickedBlock(blockId);
+      if (snap.mode === eMode.PICK) {
+        state.mode = eMode.IDLE;
+      }
+      if (snap.mode === eMode.IDLE) {
+        // Set State to PICK
+        state.mode = eMode.PICK;
+        clickedBlock(blockId);
+      }
     };
 
     const getColor = () => {
-      const yellow = "yellow";
+      // Only Hightlight Item when not Selected or in Draw Mode
+      if (snap.mode === eMode.IDLE) {
+        const yellow = "yellow";
 
-      if (hovered) {
-        return yellow;
-      } else {
-        return color;
+        if (hovered) {
+          return yellow;
+        } else {
+          return color;
+        }
       }
     };
 

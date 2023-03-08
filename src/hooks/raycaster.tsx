@@ -12,7 +12,7 @@ type RolloverPosition = {
 
 export const useRolloverPosition = (
   ref: React.RefObject<any>,
-  references: any[],
+  groundRef: React.RefObject<any>,
   mode: tMode
 ) => {
   const { raycaster, mouse, camera } = useThree();
@@ -26,8 +26,12 @@ export const useRolloverPosition = (
 
   useEffect(() => {
     const setRolloverPosition = () => {
+      // Return if Idle mode
+      if (mode === eMode.IDLE) return;
+
       // Exit early if references contain an undefined value
-      if (references[0] === undefined) {
+      if (groundRef.current === null) {
+        console.warn("No component set for groundPlane");
         return;
       }
 
@@ -38,7 +42,7 @@ export const useRolloverPosition = (
       }
 
       raycaster.setFromCamera(mouse.clone(), camera);
-      let intersects = raycaster.intersectObjects(references, true);
+      let intersects = raycaster.intersectObject(groundRef.current, true);
 
       if (intersects.length > 0) {
         let intersect = intersects[0];
@@ -47,17 +51,18 @@ export const useRolloverPosition = (
         let rolloverBox = ref.current;
         let [width, height, depth] = [1, 0.5, 1];
 
-        intersect.point.y = Math.round(Math.abs(intersect.point.y));
+        // intersect.point.y = Math.round(Math.abs(intersect.point.y));
+        intersect.point.y = 0.5;
 
         rolloverBox.position.copy(intersect.point);
 
         // https://gamedev.stackexchange.com/questions/33140/how-can-i-snap-a-game-objects-position-to-a-grid=
         // https://github.com/mrdoob/three.js/blob/master/examples/webgl_interactive_voxelpainter.html
-        rolloverBox.position
-          .divide(new THREE.Vector3(width, height, depth))
-          .floor()
-          .multiply(new THREE.Vector3(width, height, depth))
-          .add(new THREE.Vector3(width, height, depth));
+        // rolloverBox.position
+        //   .divide(new THREE.Vector3(width, height, depth))
+        //   .floor()
+        //   .multiply(new THREE.Vector3(width, height, depth))
+        //   .add(new THREE.Vector3(width, height, depth));
 
         setRollover(rolloverBox.position);
       }

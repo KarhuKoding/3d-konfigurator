@@ -1,4 +1,4 @@
-export type tMode = "DRAW" | "PICK";
+export type tMode = "IDLE" | "DRAW" | "PICKED"; // IDLE => PICKED => DRAW
 // TYPES
 export type tBlock = {
   position: {
@@ -17,7 +17,8 @@ export type tPick = "BOX" | "BOX_LARGE";
 
 export enum eMode {
   DRAW = "DRAW",
-  PICK = "PICK",
+  PICK = "PICKED",
+  IDLE = "IDLE",
 }
 
 export enum ePick {

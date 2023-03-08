@@ -8,6 +8,7 @@ import { Block } from "./Block";
 import { RolloverBlock } from "./RolloverBlock";
 import { Ground } from "./Ground";
 import { eMode, tBlock } from "../types";
+import { stat } from "fs";
 
 // TODO create initBlocks for Testing purposes
 // TODO if Mode = Pick, replace rolloverItem with the selected item
@@ -24,6 +25,12 @@ const initBlocks: tBlock[] = [
     selected: false,
     blockId: 1,
   },
+  {
+    position: { x: 4, y: 0.5, z: 2 },
+    ref: createRef(),
+    selected: false,
+    blockId: 2,
+  },
 ];
 
 function Main() {
@@ -31,51 +38,43 @@ function Main() {
 
   const [blocks, setBlocks] = useState<tBlock[]>(initBlocks);
 
-  const mainRef = useRef(null);
+  const groundRef = useRef(null);
   const rolloverRef = useRef(null);
   const clicked = useMouseDown();
-
-  const references = [
-    mainRef.current,
-    ...blocks
-      .filter((block) => block.selected === false)
-      .filter(({ ref }) => ref.current)
-      .map(({ ref }) => ref.current),
-  ];
 
   const { rolloverPosition } = useRolloverPosition(
     snap.mode === eMode.DRAW
       ? rolloverRef
       : blocks
           .filter((block) => block.selected === true)
+          .filter(({ ref }) => ref.current)
           .map(({ ref }) => ref)[0],
-    references,
+    groundRef,
+
     snap.mode
   );
 
   useEffect(() => {
-    if (clicked && snap.mode === eMode.DRAW) {
-      setTimeout(() => {
-        const newBlock = {
-          position: { ...rolloverPosition },
-          ref: createRef(),
-          selected: false,
-          blockId: blocks.length + 1,
-        };
+    // if (clicked && snap.mode === eMode.DRAW) {
+    //   setTimeout(() => {
+    //     const newBlock = {
+    //       position: { ...rolloverPosition },
+    //       ref: createRef(),
+    //       selected: false,
+    //       blockId: blocks.length + 1,
+    //     };
 
-        setBlocks([...blocks, newBlock]);
-      }, 50);
-    }
+    //     setBlocks([...blocks, newBlock]);
+    //   }, 50);
+    // }
     if (clicked && snap.mode === eMode.PICK) {
       // TODO add case for relocate an Item
-      console.log("relocate Picked item");
-      // const newState = blocks.map((block) => {
-      //   return { ...block, selected: false };
-      // });
-      // setBlocks(newState);
-      // state.mode = eMode.DRAW;
+      const newState = blocks.map((block) => {
+        return { ...block, selected: false };
+      });
+      setBlocks(newState);
     }
-  }, [clicked]);
+  }, [clicked, snap, state]);
 
   const handleStateFromBlock = (id: any) => {
     const selectedBlock = blocks.filter((block) => block.selected === true);
@@ -86,12 +85,11 @@ function Main() {
       });
       setBlocks(newState);
     }
-    state.mode = eMode.DRAW;
   };
 
   return (
     <>
-      <Ground ref={mainRef}></Ground>
+      <Ground ref={groundRef}></Ground>
 
       {snap.mode === eMode.DRAW && (
         <RolloverBlock ref={rolloverRef}></RolloverBlock>

@@ -1,21 +1,14 @@
 import { useRef, useEffect, useState, createRef } from "react";
 import { useMouseDown } from "../hooks/mouse";
 import { useRolloverPosition } from "../hooks/raycaster";
+import { Block } from "./Block";
+import { tBlock } from "../types";
 
-type Block = {
-  position: {
-    x: number;
-    y: number;
-    z: number;
-  };
-  ref: React.RefObject<any>;
-};
-
-function MainGround(props: { picker: string, mode: "Draw" | "Pick" }) {
+function MainGround(props: { picker: string; mode: "Draw" | "Pick" }) {
   const mainRef = useRef(null);
   const rolloverRef = useRef(null);
 
-  const [blocks, setBlocks] = useState<Block[]>([]);
+  const [blocks, setBlocks] = useState<tBlock[]>([]);
 
   const clicked = useMouseDown();
 
@@ -25,7 +18,6 @@ function MainGround(props: { picker: string, mode: "Draw" | "Pick" }) {
   ];
 
   // TODO refactor Rollover Stuff into own component
-
   const { rolloverPosition } = useRolloverPosition(
     rolloverRef,
     references,
@@ -60,14 +52,11 @@ function MainGround(props: { picker: string, mode: "Draw" | "Pick" }) {
 
       {blocks.map(({ position, ref }, id) => {
         return (
-          <mesh
+          <Block
             position={[position.x, position.y, position.z]}
             ref={ref}
             key={id}
-          >
-            <boxGeometry args={[1, 1, 1]} />
-            <meshStandardMaterial color={"blue"} />
-          </mesh>
+          />
         );
       })}
       {/* {props.picker === "box" ? (

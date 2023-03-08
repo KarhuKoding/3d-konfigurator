@@ -1,4 +1,14 @@
 export type tMode = "DRAW" | "PICK";
+// TYPES
+export type tBlock = {
+  position: {
+    x: number;
+    y: number;
+    z: number;
+  };
+  ref: React.RefObject<any>;
+};
+
 export type tElement = "Box" | "BoxL";
 
 export type State = {

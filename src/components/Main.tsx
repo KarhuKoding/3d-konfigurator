@@ -1,4 +1,7 @@
 import { useRef, useEffect, useState, createRef } from "react";
+import { useSnapshot } from "valtio";
+
+import { state } from "../store/store";
 import { useMouseDown } from "../hooks/mouse";
 import { useRolloverPosition } from "../hooks/raycaster";
 import { Block } from "./Block";
@@ -6,24 +9,22 @@ import { RolloverBlock } from "./RolloverBlock";
 import { Ground } from "./Ground";
 import { tBlock } from "../types";
 
-function MainGround(props: { picker: string; mode: "Draw" | "Pick" }) {
-  const mainRef = useRef(null);
-  const rolloverRef = useRef(null);
+function Main() {
+  const snap = useSnapshot(state);
 
   const [blocks, setBlocks] = useState<tBlock[]>([]);
-
+  const mainRef = useRef(null);
+  const rolloverRef = useRef(null);
   const clicked = useMouseDown();
 
   const references = [
     ...blocks.filter(({ ref }) => ref.current).map(({ ref }) => ref.current),
     mainRef.current,
   ];
-
-  // TODO refactor Rollover Stuff into own component
   const { rolloverPosition } = useRolloverPosition(
     rolloverRef,
     references,
-    props.mode
+    snap.mode
   );
 
   useEffect(() => {
@@ -43,7 +44,7 @@ function MainGround(props: { picker: string; mode: "Draw" | "Pick" }) {
     <>
       <Ground ref={mainRef}></Ground>
       <RolloverBlock ref={rolloverRef}></RolloverBlock>
-      
+
       {blocks.map(({ position, ref }, id) => {
         return (
           <Block
@@ -57,4 +58,4 @@ function MainGround(props: { picker: string; mode: "Draw" | "Pick" }) {
   );
 }
 
-export default MainGround;
+export default Main;

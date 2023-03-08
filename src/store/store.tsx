@@ -1,9 +1,9 @@
 import { proxy } from "valtio";
-import { State, eMode } from "../types";
+import { State, eMode, ePick } from "../types";
 
 const initState: State = {
   mode: eMode.DRAW,
-  pick: "Box",
+  pick: ePick.BOX,
 };
 
 const state = proxy({

@@ -9,11 +9,11 @@ export type tBlock = {
   ref: React.RefObject<any>;
 };
 
-export type tElement = "Box" | "BoxL";
+export type tPick = "BOX" | "BOX_LARGE";
 
 export type State = {
   mode: tMode;
-  pick: tElement;
+  pick: tPick;
 };
 
 // ENUMS
@@ -21,4 +21,9 @@ export type State = {
 export enum eMode {
   DRAW = "DRAW",
   PICK = "PICK",
+}
+
+export enum ePick {
+  BOX = "BOX",
+  BOX_LARGE = "BOX_LARGE",
 }

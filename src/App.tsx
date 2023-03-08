@@ -1,8 +1,7 @@
 import { Canvas } from "@react-three/fiber";
 import { useCallback, useState } from "react";
-import SelectionWheel from "./components/selectionwheel";
-import { MeshPicker } from "./components/MeshPicker";
-import { useEventListener } from "./useEventListener";
+import Sidebar from "./components/HTML/Sidebar";
+import { useEventListener } from "./hooks/useEventListener";
 import MainGround from "./components/Main";
 import { OrbitControls } from "@react-three/drei";
 
@@ -11,9 +10,6 @@ import "./index.scss";
 function App() {
   const [showOverlay, setShowOverlay] = useState(false);
   const [selection, setSelection] = useState(null);
-
-  const [picker, setPicker] = useState("box");
-  const [mode, setMode] = useState<"Draw" | "Pick">("Draw");
 
   const playAudio = () => {
     if (selection === null) return;
@@ -58,11 +54,6 @@ function App() {
     [setShowOverlay, selection]
   );
 
-  const onChangeValue = (e: any) => {
-    console.log(e.target.value);
-    setMode(e.target.value);
-  };
-  // Add event listener using our hook
   useEventListener("keydown", handler);
   useEventListener("keyup", handlerKeyup);
 
@@ -77,31 +68,11 @@ function App() {
           </div>
         )} */}
 
-        <section className="sidebarWrapper">
-          <h2>Sidebar</h2>
-          <hr />
-          <MeshPicker setPicker={setPicker} picker={picker} />
-          <div onChange={(e) => onChangeValue(e)}>
-            <input
-              type="radio"
-              value="Draw"
-              name="mode"
-              checked={mode === "Draw"}
-            />{" "}
-            Draw
-            <input
-              type="radio"
-              value="Pick"
-              name="mode"
-              checked={mode === "Pick"}
-            />{" "}
-            Pick
-          </div>
-        </section>
+        <Sidebar />
         <section className="canvasWrapper">
           <Canvas>
             <pointLight position={[10, 10, 10]} />
-            <MainGround picker={picker} mode={mode} />
+            <MainGround />
             <OrbitControls></OrbitControls>
           </Canvas>
         </section>

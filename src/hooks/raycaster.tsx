@@ -2,6 +2,7 @@ import { useThree } from "@react-three/fiber";
 import React, { useEffect, useState } from "react";
 import * as THREE from "three";
 import { Intersection } from "three";
+import { tMode } from "../types";
 
 type RolloverPosition = {
   x: number;
@@ -12,7 +13,7 @@ type RolloverPosition = {
 export const useRolloverPosition = (
   ref: React.RefObject<any>,
   references: any[],
-  mode: "Draw" | "Pick"
+  mode: tMode
 ) => {
   const { raycaster, mouse, camera } = useThree();
 

@@ -11,8 +11,9 @@ import { tBlock } from "../types";
 
 function Main() {
   const snap = useSnapshot(state);
-
+  
   const [blocks, setBlocks] = useState<tBlock[]>([]);
+  
   const mainRef = useRef(null);
   const rolloverRef = useRef(null);
   const clicked = useMouseDown();

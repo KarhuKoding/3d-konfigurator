@@ -17,6 +17,7 @@ const MeshPicker = () => {
           <li
             onClick={() => handleClick(block.description)}
             className={snap.pick === block.description ? "selected" : ""}
+            key={block.title}
           >
             {block.title}
           </li>

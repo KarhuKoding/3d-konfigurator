@@ -6,6 +6,11 @@ export type tBlock = {
     y: number;
     z: number;
   };
+  rotation: {
+    x: number;
+    y: number;
+    z: number;
+  };
   ref: React.RefObject<any>;
   selected: Boolean;
   blockId: number;

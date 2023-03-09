@@ -1,4 +1,10 @@
-import React, { useRef, useEffect, useState, createRef } from "react";
+import React, {
+  useRef,
+  useEffect,
+  useState,
+  createRef,
+  useCallback,
+} from "react";
 import { useSnapshot } from "valtio";
 
 import { state } from "../store/store";
@@ -12,12 +18,17 @@ import {
   getActiveBrickGeometry,
   getActiveBrickRolloverComponent,
 } from "../blocks";
+import { useEventListener } from "../hooks/useEventListener";
+import * as THREE from "three";
 
-//  create initBlocks for Testing purposes
+const degToRadians = (deg: number) => {
+  return (deg * Math.PI) / 180;
+};
 
 const initBlocks: tBlock[] = [
   {
     position: { x: 1, y: 0.5, z: 1 },
+    rotation: { x: 0, y: 0, z: 0 },
     ref: createRef(),
     selected: false,
     blockId: 0,
@@ -25,17 +36,19 @@ const initBlocks: tBlock[] = [
   },
   {
     position: { x: 2, y: 0.5, z: 0 },
+    rotation: { x: 0, y: 0, z: 0 },
     ref: createRef(),
     selected: false,
     blockId: 1,
-    description: ePick.BOX,
+    description: ePick.BOX_LARGE,
   },
   {
     position: { x: 4, y: 0.5, z: 2 },
+    rotation: { x: 0, y: 0, z: 0 },
     ref: createRef(),
     selected: false,
     blockId: 2,
-    description: ePick.BOX,
+    description: ePick.BOX_LARGE,
   },
 ];
 
@@ -43,6 +56,7 @@ function Main() {
   const snap = useSnapshot(state);
 
   const [blocks, setBlocks] = useState<tBlock[]>(initBlocks);
+  const [rotation, setRotation] = useState<number>(45);
 
   const groundRef = useRef(null);
   const rolloverRef = useRef(null);
@@ -72,6 +86,7 @@ function Main() {
           selected: false,
           blockId: blocks.length + 1,
           description: snap.pick,
+          rotation: { x: 0, y: 0, z: 0 },
         };
 
         setBlocks([...blocks, newBlock]);
@@ -86,6 +101,25 @@ function Main() {
       setBlocks(newState);
     }
   }, [clicked, snap, state]);
+
+  const handler = useCallback(
+    ({ code }: { code: string }) => {
+      if (code === "Space" && snap.mode === eMode.DRAW && rolloverRef.current) {
+        setRotation((prev) => {
+          if (prev === 360) {
+            return 45;
+          }
+          return prev + 45;
+        });
+        // @ts-ignore
+        rolloverRef.current.rotation.y = degToRadians(rotation);
+      }
+      return;
+    },
+    [snap.mode, rotation, setRotation, rolloverRef]
+  );
+
+  useEventListener("keydown", handler);
 
   const handleStateFromBlock = (id: any) => {
     const selectedBlock = blocks.filter((block) => block.selected === true);
@@ -112,11 +146,12 @@ function Main() {
         </React.Suspense>
       )}
 
-      {blocks.map(({ position, ref, blockId, description }, id) => {
+      {blocks.map(({ position, rotation, ref, blockId, description }, id) => {
         return (
           // @ts-ignore
           <Block
             position={[position.x, position.y, position.z]}
+            rotation={[rotation.x, rotation.y, rotation.z]}
             ref={ref}
             key={id}
             color="blue"

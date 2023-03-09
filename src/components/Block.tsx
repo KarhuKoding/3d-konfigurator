@@ -5,6 +5,7 @@ import { eMode } from "../types";
 
 interface Props {
   position: [x: number, y: number, z: number];
+  rotation: [x: number, y: number, z: number];
   color: string;
   clickedBlock: Function;
   blockId: number;
@@ -13,8 +14,9 @@ interface Props {
 type Ref = any;
 
 export const Block = React.forwardRef<Ref, Props>(
-  ({ position, color, clickedBlock, blockId, geometry }, ref) => {
+  ({ position, rotation, color, clickedBlock, blockId, geometry }, ref) => {
     const [x, y, z] = position;
+    const [rx, ry, rz] = rotation;
     const [hovered, setHover] = useState<null | Boolean>(null);
     const snap = useSnapshot(state);
 
@@ -45,6 +47,7 @@ export const Block = React.forwardRef<Ref, Props>(
     return (
       <mesh
         position={[x, y, z]}
+        rotation={[rx, ry, rz]}
         ref={ref}
         onPointerOver={() => setHover(true)}
         onPointerOut={() => setHover(false)}

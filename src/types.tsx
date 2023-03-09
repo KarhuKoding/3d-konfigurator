@@ -9,6 +9,7 @@ export type tBlock = {
   ref: React.RefObject<any>;
   selected: Boolean;
   blockId: number;
+  description: tPick;
 };
 
 export type tPick = "BOX" | "BOX_LARGE";

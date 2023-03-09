@@ -4,11 +4,14 @@ import { useSnapshot } from "valtio";
 import { state } from "../store/store";
 import { useMouseDown } from "../hooks/mouse";
 import { useRolloverPosition } from "../hooks/raycaster";
-import { Block } from "./Block";
-import { RolloverBlock } from "./RolloverBlock";
+
 import { Ground } from "./Ground";
 import { eMode, ePick, tBlock } from "../types";
-import { getBrickComponent } from "../blocks";
+import {
+  getActiveBlockComponent,
+  getActiveBrickGeometry,
+  getActiveBrickRolloverComponent,
+} from "../blocks";
 
 //  create initBlocks for Testing purposes
 
@@ -18,18 +21,21 @@ const initBlocks: tBlock[] = [
     ref: createRef(),
     selected: false,
     blockId: 0,
+    description: ePick.BOX_LARGE,
   },
   {
     position: { x: 2, y: 0.5, z: 0 },
     ref: createRef(),
     selected: false,
     blockId: 1,
+    description: ePick.BOX,
   },
   {
     position: { x: 4, y: 0.5, z: 2 },
     ref: createRef(),
     selected: false,
     blockId: 2,
+    description: ePick.BOX,
   },
 ];
 
@@ -42,8 +48,9 @@ function Main() {
   const rolloverRef = useRef(null);
   const clicked = useMouseDown();
 
-  const TestBlock = getBrickComponent(snap.pick);
-  console.log(snap.pick);
+  const RolloverBlock = getActiveBrickRolloverComponent(snap.pick);
+  const Block = getActiveBlockComponent(snap.pick);
+  const geomerty = getActiveBrickGeometry(snap.pick);
 
   const { rolloverPosition } = useRolloverPosition(
     snap.mode === eMode.DRAW
@@ -65,6 +72,7 @@ function Main() {
           ref: createRef(),
           selected: false,
           blockId: blocks.length + 1,
+          description: snap.pick,
         };
 
         setBlocks([...blocks, newBlock]);
@@ -95,15 +103,16 @@ function Main() {
     <>
       <Ground ref={groundRef}></Ground>
 
-      {/* {snap.mode === eMode.DRAW && (
-        <RolloverBlock ref={rolloverRef}></RolloverBlock>
-      )} */}
-      <React.Suspense fallback={null}>
-        {/* @ts-ignore */}
-        <TestBlock color={0xffff00}></TestBlock>
-      </React.Suspense>
-      {blocks.map(({ position, ref, blockId }, id) => {
+      {snap.mode === eMode.DRAW && (
+        <React.Suspense fallback={null}>
+          {/* @ts-ignore  */}
+          <RolloverBlock ref={rolloverRef} geomerty={geomerty}></RolloverBlock>
+        </React.Suspense>
+      )}
+      
+      {blocks.map(({ position, ref, blockId, description }, id) => {
         return (
+          // @ts-ignore
           <Block
             position={[position.x, position.y, position.z]}
             ref={ref}
@@ -111,6 +120,7 @@ function Main() {
             color="blue"
             clickedBlock={handleStateFromBlock}
             blockId={blockId}
+            geometry={getActiveBrickGeometry(description)}
           />
         );
       })}

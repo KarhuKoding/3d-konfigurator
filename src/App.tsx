@@ -70,7 +70,7 @@ function App() {
 
         <Sidebar />
         <section className="canvasWrapper">
-          <Canvas>
+          <Canvas camera={{ position: [2.5, 4, 7] }}>
             <pointLight position={[10, 10, 10]} />
             <MainGround />
             <OrbitControls></OrbitControls>

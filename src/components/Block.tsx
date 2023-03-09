@@ -8,11 +8,12 @@ interface Props {
   color: string;
   clickedBlock: Function;
   blockId: number;
+  geometry: any;
 }
 type Ref = any;
 
 export const Block = React.forwardRef<Ref, Props>(
-  ({ position, color, clickedBlock, blockId }, ref) => {
+  ({ position, color, clickedBlock, blockId, geometry }, ref) => {
     const [x, y, z] = position;
     const [hovered, setHover] = useState<null | Boolean>(null);
     const snap = useSnapshot(state);
@@ -49,7 +50,7 @@ export const Block = React.forwardRef<Ref, Props>(
         onPointerOut={() => setHover(false)}
         onClick={handeClick}
       >
-        <boxGeometry args={[1, 1, 1]} />
+        {geometry}
         <meshStandardMaterial color={getColor()} />
       </mesh>
     );

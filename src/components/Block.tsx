@@ -14,8 +14,8 @@ type Ref = any;
 export const Block = React.forwardRef<Ref, Props>(
   ({ position, color, clickedBlock, blockId }, ref) => {
     const [x, y, z] = position;
-    const snap = useSnapshot(state);
     const [hovered, setHover] = useState<null | Boolean>(null);
+    const snap = useSnapshot(state);
 
     const handeClick = () => {
       if (snap.mode === eMode.PICK) {

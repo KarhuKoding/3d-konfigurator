@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState, createRef } from "react";
+import React, { useRef, useEffect, useState, createRef } from "react";
 import { useSnapshot } from "valtio";
 
 import { state } from "../store/store";
@@ -7,11 +7,11 @@ import { useRolloverPosition } from "../hooks/raycaster";
 import { Block } from "./Block";
 import { RolloverBlock } from "./RolloverBlock";
 import { Ground } from "./Ground";
-import { eMode, tBlock } from "../types";
-import { stat } from "fs";
+import { eMode, ePick, tBlock } from "../types";
+import { getBrickComponent } from "../blocks";
 
-// TODO create initBlocks for Testing purposes
-// TODO if Mode = Pick, replace rolloverItem with the selected item
+//  create initBlocks for Testing purposes
+
 const initBlocks: tBlock[] = [
   {
     position: { x: 1, y: 0.5, z: 1 },
@@ -41,6 +41,9 @@ function Main() {
   const groundRef = useRef(null);
   const rolloverRef = useRef(null);
   const clicked = useMouseDown();
+
+  const TestBlock = getBrickComponent(snap.pick);
+  console.log(snap.pick);
 
   const { rolloverPosition } = useRolloverPosition(
     snap.mode === eMode.DRAW
@@ -92,11 +95,14 @@ function Main() {
     <>
       <Ground ref={groundRef}></Ground>
 
-      {snap.mode === eMode.DRAW && (
+      {/* {snap.mode === eMode.DRAW && (
         <RolloverBlock ref={rolloverRef}></RolloverBlock>
-      )}
-
-      {blocks.map(({ position, ref, blockId, selected }, id) => {
+      )} */}
+      <React.Suspense fallback={null}>
+        {/* @ts-ignore */}
+        <TestBlock color={0xffff00}></TestBlock>
+      </React.Suspense>
+      {blocks.map(({ position, ref, blockId }, id) => {
         return (
           <Block
             position={[position.x, position.y, position.z]}

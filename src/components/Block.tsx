@@ -2,6 +2,7 @@ import React, { useEffect, useState, createRef } from "react";
 import { useSnapshot } from "valtio";
 import { state } from "../store/store";
 import { eMode } from "../types";
+import { Edges } from "@react-three/drei";
 
 interface Props {
   position: [x: number, y: number, z: number];
@@ -14,7 +15,7 @@ interface Props {
 type Ref = any;
 
 export const Block = React.forwardRef<Ref, Props>(
-  ({ position, rotation, color, clickedBlock, blockId, geometry }, ref) => {
+  ({ position, rotation, color="blue", clickedBlock, blockId, geometry }, ref) => {
     const [x, y, z] = position;
     const [rx, ry, rz] = rotation;
     const [hovered, setHover] = useState<null | Boolean>(null);
@@ -45,17 +46,24 @@ export const Block = React.forwardRef<Ref, Props>(
     };
 
     return (
-      <mesh
-        position={[x, y, z]}
-        rotation={[rx, ry, rz]}
-        ref={ref}
-        onPointerOver={() => setHover(true)}
-        onPointerOut={() => setHover(false)}
-        onClick={handeClick}
-      >
-        {geometry}
-        <meshStandardMaterial color={getColor()} />
-      </mesh>
+      <>
+        <mesh
+          position={[x, y, z]}
+          rotation={[rx, ry, rz]}
+          ref={ref}
+          onPointerOver={() => setHover(true)}
+          onPointerOut={() => setHover(false)}
+          onClick={handeClick}
+        >
+          {geometry}
+          <meshStandardMaterial color={getColor()} />
+        </mesh>
+         <mesh position={[x, y, z]} rotation={[rx, ry, rz]} scale={1.1}>
+          {geometry}
+          <meshStandardMaterial transparent opacity={0}/>
+          <Edges />
+        </mesh> 
+      </>
     );
   }
 );

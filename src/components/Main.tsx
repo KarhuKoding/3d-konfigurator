@@ -19,7 +19,6 @@ import {
   getActiveBrickRolloverComponent,
 } from "../blocks";
 import { useEventListener } from "../hooks/useEventListener";
-import * as THREE from "three";
 
 const degToRadians = (deg: number) => {
   return (deg * Math.PI) / 180;
@@ -88,9 +87,9 @@ function Main() {
           description: snap.pick,
           rotation: { x: 0, y: degToRadians(rotation - 45), z: 0 },
         };
-        console.log("rotation", rotation);
 
         setBlocks([...blocks, newBlock]);
+        setRotation(45);
         state.mode = eMode.IDLE;
       }, 50);
     }

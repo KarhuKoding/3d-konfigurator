@@ -86,8 +86,9 @@ function Main() {
           selected: false,
           blockId: blocks.length + 1,
           description: snap.pick,
-          rotation: { x: 0, y: 0, z: 0 },
+          rotation: { x: 0, y: degToRadians(rotation - 45), z: 0 },
         };
+        console.log("rotation", rotation);
 
         setBlocks([...blocks, newBlock]);
         state.mode = eMode.IDLE;
@@ -100,7 +101,7 @@ function Main() {
       });
       setBlocks(newState);
     }
-  }, [clicked, snap, state]);
+  }, [clicked, snap, state, rotation]);
 
   const handler = useCallback(
     ({ code }: { code: string }) => {
@@ -114,6 +115,8 @@ function Main() {
         // @ts-ignore
         rolloverRef.current.rotation.y = degToRadians(rotation);
       }
+
+      // TODO add case to update the rotation of an Picked Item
       return;
     },
     [snap.mode, rotation, setRotation, rolloverRef]

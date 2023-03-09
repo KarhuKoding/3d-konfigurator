@@ -3,9 +3,19 @@ import { Block } from "./components/Block";
 import { RolloverBlock } from "./components/RolloverBlock";
 
 export const availableBlocks = [
+  // eg chair 3
+  {
+    description: ePick.BOX_SMALL,
+    title: "Small Box",
+    dimensions: [1, 2, 1],
+    rolloverComponent: RolloverBlock, //chair3
+    component: Block, // chair3
+    geomerty: <boxGeometry args={[0.5, 1, 0.5]} />,
+  },
   // eg chair 1
   {
     description: ePick.BOX,
+    title: "Box",
     dimensions: [1, 1, 1],
     rolloverComponent: RolloverBlock, //chair1
     component: Block, // chair1
@@ -14,6 +24,7 @@ export const availableBlocks = [
   // eg chair 2
   {
     description: ePick.BOX_LARGE,
+    title: "Big Box",
     dimensions: [1, 2, 1],
     rolloverComponent: RolloverBlock, //chair2
     component: Block, // chair2

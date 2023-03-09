@@ -50,7 +50,6 @@ function Main() {
 
   const RolloverBlock = getActiveBrickRolloverComponent(snap.pick);
   const Block = getActiveBlockComponent(snap.pick);
-  const geomerty = getActiveBrickGeometry(snap.pick);
 
   const { rolloverPosition } = useRolloverPosition(
     snap.mode === eMode.DRAW
@@ -106,10 +105,13 @@ function Main() {
       {snap.mode === eMode.DRAW && (
         <React.Suspense fallback={null}>
           {/* @ts-ignore  */}
-          <RolloverBlock ref={rolloverRef} geomerty={geomerty}></RolloverBlock>
+          <RolloverBlock
+            ref={rolloverRef}
+            geomerty={getActiveBrickGeometry(snap.pick)}
+          ></RolloverBlock>
         </React.Suspense>
       )}
-      
+
       {blocks.map(({ position, ref, blockId, description }, id) => {
         return (
           // @ts-ignore

@@ -1,6 +1,7 @@
 import { useSnapshot } from "valtio";
 import { state } from "../../store/store";
 import { eMode, ePick, tMode, tPick } from "../../types";
+import { availableBlocks } from "../../blocks";
 
 const MeshPicker = () => {
   const snap = useSnapshot(state);
@@ -11,18 +12,16 @@ const MeshPicker = () => {
 
   return (
     <ul>
-      <li
-        onClick={() => handleClick(ePick.BOX)}
-        className={snap.pick === ePick.BOX ? "selected" : ""}
-      >
-        Box
-      </li>
-      <li
-        onClick={() => handleClick(ePick.BOX_LARGE)}
-        className={snap.pick === ePick.BOX_LARGE ? "selected" : ""}
-      >
-        Big Box
-      </li>
+      {availableBlocks.map((block) => {
+        return (
+          <li
+            onClick={() => handleClick(block.description)}
+            className={snap.pick === block.description ? "selected" : ""}
+          >
+            {block.title}
+          </li>
+        );
+      })}
     </ul>
   );
 };

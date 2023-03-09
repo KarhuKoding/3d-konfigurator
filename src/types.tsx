@@ -12,7 +12,7 @@ export type tBlock = {
   description: tPick;
 };
 
-export type tPick = "BOX" | "BOX_LARGE";
+export type tPick = "BOX" | "BOX_LARGE" | "BOX_SMALL";
 
 // ENUMS
 
@@ -23,6 +23,7 @@ export enum eMode {
 }
 
 export enum ePick {
+  BOX_SMALL = "BOX_SMALL",
   BOX = "BOX",
   BOX_LARGE = "BOX_LARGE",
 }

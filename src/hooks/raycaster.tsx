@@ -52,7 +52,7 @@ export const useRolloverPosition = (
         let [width, height, depth] = [1, 0.5, 1];
 
         // intersect.point.y = Math.round(Math.abs(intersect.point.y));
-        intersect.point.y = 0.5;
+        intersect.point.y = 0;
 
         rolloverBox.position.copy(intersect.point);
 

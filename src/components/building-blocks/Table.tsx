@@ -15,13 +15,11 @@ type GLTFResult = GLTF & {
 export function Table(props: JSX.IntrinsicElements["group"]) {
   const { nodes, materials } = useGLTF("/table.gltf") as GLTFResult;
   return (
-    <group {...props} dispose={null}>
-      <mesh
-        castShadow
-        geometry={nodes.Office_Desk005.geometry}
-        material={materials.OfficeTable}
-      />
-    </group>
+    <mesh
+      castShadow
+      geometry={nodes.Office_Desk005.geometry}
+      material={materials.OfficeTable}
+    />
   );
 }
 

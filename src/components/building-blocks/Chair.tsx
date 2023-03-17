@@ -17,7 +17,6 @@ export function Chair(props: JSX.IntrinsicElements["group"]) {
     <group {...props} dispose={null}>
       <mesh
         castShadow
-        receiveShadow
         geometry={nodes.Chair001.geometry}
         material={materials.Chair01}
         position={[1.28, 0.03, 0.7]}

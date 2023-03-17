@@ -1,34 +1,38 @@
 import { ePick, tPick } from "./types";
 import { Block } from "./components/Block";
+import { Table } from "./components/building-blocks/Table";
+import { Chair } from "./components/building-blocks/Chair";
 import { RolloverBlock } from "./components/RolloverBlock";
 
+import ChairPreview from "./assets/chair.png";
+import TablePreview from "./assets/table.png";
+
 export const availableBlocks = [
-  // eg chair 3
+  // Chair 1
   {
-    description: ePick.BOX_SMALL,
-    title: "Small Box",
-    dimensions: [1, 2, 1],
-    rolloverComponent: RolloverBlock, //chair3
-    component: Block, // chair3
-    geomerty: <boxGeometry args={[0.5, 1, 0.5]} />,
+    description: ePick.CHAIR_1,
+
+    meta: {
+      title: "Chair",
+      price: "534,40",
+      imgSrc: ChairPreview,
+    },
+    rolloverComponent: RolloverBlock, // Chair 1
+    component: Table, //  Chair 1
+    geomerty: Table,
   },
-  // eg chair 1
+  // Table 1
   {
-    description: ePick.BOX,
-    title: "Box",
-    dimensions: [1, 1, 1],
-    rolloverComponent: RolloverBlock, //chair1
-    component: Block, // chair1
-    geomerty: <boxGeometry args={[1, 1, 1]} />,
-  },
-  // eg chair 2
-  {
-    description: ePick.BOX_LARGE,
-    title: "Big Box",
-    dimensions: [1, 2, 1],
-    rolloverComponent: RolloverBlock, //chair2
-    component: Block, // chair2
-    geomerty: <boxGeometry args={[2, 1, 1]} />,
+    description: ePick.TABLE_1,
+
+    rolloverComponent: RolloverBlock, //Table1
+    meta: {
+      title: "Table",
+      price: "650,75",
+      imgSrc: TablePreview,
+    },
+    component: Chair, // Table1
+    geomerty: Chair,
   },
 ];
 

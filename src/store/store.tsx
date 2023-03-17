@@ -10,7 +10,7 @@ export type State = {
 
 const initState: State = {
   mode: eMode.DRAW,
-  pick: ePick.BOX,
+  pick: ePick.CHAIR_1,
   selectedBlock: null,
 };
 

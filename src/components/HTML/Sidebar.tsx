@@ -52,7 +52,11 @@ const ModeForm = () => {
 const Sidebar = () => {
   return (
     <section className="sidebarWrapper">
-      <MeshPicker />
+      <ul className="sidebarElement">
+        {availableBlocks.map((element) => {
+          return <MeshPicker element={element} />;
+        })}
+      </ul>
       <ModeForm />
     </section>
   );

@@ -19,6 +19,7 @@ import {
   getActiveBrickRolloverComponent,
 } from "../blocks";
 import { useEventListener } from "../hooks/useEventListener";
+import { Block } from "../components/Block";
 
 const degToRadians = (deg: number) => {
   return (deg * Math.PI) / 180;
@@ -26,7 +27,7 @@ const degToRadians = (deg: number) => {
 
 const initBlocks: tBlock[] = [
   {
-    position: { x: 1, y: 0.5, z: 1 },
+    position: { x: 1, y: 0, z: 1 },
     rotation: { x: 0, y: 0, z: 0 },
     ref: createRef(),
     selected: false,
@@ -34,7 +35,7 @@ const initBlocks: tBlock[] = [
     description: ePick.CHAIR_1,
   },
   {
-    position: { x: 2, y: 0.5, z: 0 },
+    position: { x: 2, y: 0, z: 0 },
     rotation: { x: 0, y: 0, z: 0 },
     ref: createRef(),
     selected: false,
@@ -54,7 +55,6 @@ function Main() {
   const clicked = useMouseDown();
 
   const RolloverBlock = getActiveBrickRolloverComponent(snap.pick);
-  const Block = getActiveBlockComponent(snap.pick);
 
   const { rolloverPosition } = useRolloverPosition(
     snap.mode === eMode.DRAW
@@ -152,6 +152,7 @@ function Main() {
             clickedBlock={handleStateFromBlock}
             blockId={blockId}
             geometry={getActiveBrickGeometry(description)}
+         
           />
         );
       })}

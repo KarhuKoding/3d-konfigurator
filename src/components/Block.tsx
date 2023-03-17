@@ -11,11 +11,23 @@ interface Props {
   clickedBlock: Function;
   blockId: number;
   geometry: any;
+  material: any;
 }
 type Ref = any;
 
 export const Block = React.forwardRef<Ref, Props>(
-  ({ position, rotation, color="blue", clickedBlock, blockId, geometry }, ref) => {
+  (
+    {
+      position,
+      rotation,
+      color = "blue",
+      clickedBlock,
+      blockId,
+      geometry,
+      material,
+    },
+    ref
+  ) => {
     const [x, y, z] = position;
     const [rx, ry, rz] = rotation;
     const [hovered, setHover] = useState<null | Boolean>(null);
@@ -47,7 +59,7 @@ export const Block = React.forwardRef<Ref, Props>(
 
     return (
       <>
-        <mesh
+        <group
           position={[x, y, z]}
           rotation={[rx, ry, rz]}
           ref={ref}
@@ -57,12 +69,7 @@ export const Block = React.forwardRef<Ref, Props>(
         >
           {geometry}
           <meshStandardMaterial color={getColor()} />
-        </mesh>
-         <mesh position={[x, y, z]} rotation={[rx, ry, rz]} scale={1.1}>
-          {geometry}
-          <meshStandardMaterial transparent opacity={0}/>
-          <Edges />
-        </mesh> 
+        </group>
       </>
     );
   }

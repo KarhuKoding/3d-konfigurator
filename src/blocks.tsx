@@ -18,27 +18,28 @@ export const availableBlocks = [
       imgSrc: ChairPreview,
     },
     rolloverComponent: RolloverBlock, // Chair 1
-    component: Table, //  Chair 1
-    geomerty: Table,
+    component: Block, //  Chair 1
+    geomerty: <Chair />,
   },
   // Table 1
   {
     description: ePick.TABLE_1,
 
-    rolloverComponent: RolloverBlock, //Table1
     meta: {
       title: "Table",
       price: "650,75",
       imgSrc: TablePreview,
     },
-    component: Chair, // Table1
-    geomerty: Chair,
+    rolloverComponent: RolloverBlock, //Table1
+    component: Block, // Table1
+    geomerty: <Table />,
   },
 ];
 
 export function getActiveBlockComponent(pick: tPick) {
   return availableBlocks.find((block) => block.description === pick)?.component;
 }
+
 export function getActiveBrickRolloverComponent(pick: tPick) {
   return availableBlocks.find((block) => block.description === pick)
     ?.rolloverComponent;

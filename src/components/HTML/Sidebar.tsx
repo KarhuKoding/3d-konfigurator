@@ -54,7 +54,7 @@ const Sidebar = () => {
     <section className="sidebarWrapper">
       <ul className="sidebarElement">
         {availableBlocks.map((element) => {
-          return <MeshPicker element={element} />;
+          return <MeshPicker element={element} key={element.description}/>;
         })}
       </ul>
       <ModeForm />

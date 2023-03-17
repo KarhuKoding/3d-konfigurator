@@ -14,7 +14,6 @@ export const MeshPicker = ({ element }: { element: any }) => {
     <li
       onClick={() => handleClick(element.description)}
       // className={snap.pick === block.description ? "selected" : ""}
-      key={element.meta.title}
       className="sidebarElement__item"
     >
       <div className="sidebarElement__details">

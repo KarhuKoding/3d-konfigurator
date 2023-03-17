@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import React, { useRef } from "react";
-import { useGLTF } from "@react-three/drei";
+import { useGLTF, useTexture } from "@react-three/drei";
 import { GLTF } from "three-stdlib";
 
 type GLTFResult = GLTF & {
@@ -12,14 +12,13 @@ type GLTFResult = GLTF & {
 
 export function Walls(props: JSX.IntrinsicElements["group"]) {
   const { nodes, materials } = useGLTF("/walls.glb") as GLTFResult;
+  const bakedTexture = useTexture("/wood-texture-wall.jpg");
+
   return (
     <group {...props} dispose={null}>
-      <mesh
-        castShadow
-        receiveShadow
-        geometry={nodes.Walls.geometry}
-        material={nodes.Walls.material}
-      />
+      <mesh castShadow receiveShadow geometry={nodes.Walls.geometry}>
+        <meshBasicMaterial map={bakedTexture} map-flipY={false} />
+      </mesh>
     </group>
   );
 }

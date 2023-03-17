@@ -24,7 +24,7 @@ export const Ground = React.forwardRef<Ref, Props>(({}, ref) => {
   return (
     <>
       {/* <color attach="background" args={["#191920"]} /> */}
-      <fog attach="fog" args={["#191920", 0, 15]} />
+      {/* <fog attach="fog" args={["#191920", 0, 15]} /> */}
       <mesh
         rotation={[-Math.PI / 2, 0, 0]}
         ref={ref}

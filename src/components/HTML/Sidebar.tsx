@@ -2,30 +2,7 @@ import { useSnapshot } from "valtio";
 import { state } from "../../store/store";
 import { eMode, ePick, tMode, tPick } from "../../types";
 import { availableBlocks } from "../../blocks";
-
-const MeshPicker = () => {
-  const snap = useSnapshot(state);
-
-  const handleClick = (pick: tPick) => {
-    state.pick = pick;
-  };
-
-  return (
-    <ul>
-      {availableBlocks.map((block) => {
-        return (
-          <li
-            onClick={() => handleClick(block.description)}
-            className={snap.pick === block.description ? "selected" : ""}
-            key={block.title}
-          >
-            {block.title}
-          </li>
-        );
-      })}
-    </ul>
-  );
-};
+import { MeshPicker } from "./SidebarElement";
 
 const ModeForm = () => {
   const snap = useSnapshot(state);
@@ -75,8 +52,6 @@ const ModeForm = () => {
 const Sidebar = () => {
   return (
     <section className="sidebarWrapper">
-      <h2>Sidebar</h2>
-      <hr />
       <MeshPicker />
       <ModeForm />
     </section>

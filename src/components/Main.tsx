@@ -19,6 +19,7 @@ import {
   getActiveBrickRolloverComponent,
 } from "../blocks";
 import { useEventListener } from "../hooks/useEventListener";
+import { Chair } from "./building-blocks/Chair";
 
 const degToRadians = (deg: number) => {
   return (deg * Math.PI) / 180;
@@ -137,6 +138,7 @@ function Main() {
   return (
     <>
       <Ground ref={groundRef}></Ground>
+      <Chair />
 
       {snap.mode === eMode.DRAW && (
         <React.Suspense fallback={null}>

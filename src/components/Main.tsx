@@ -10,16 +10,13 @@ import { useSnapshot } from "valtio";
 import { state } from "../store/store";
 import { useMouseDown } from "../hooks/mouse";
 import { useRolloverPosition } from "../hooks/raycaster";
-
+import { Merged } from "@react-three/drei";
 import { Ground } from "./Ground";
 import { eMode, ePick, tBlock } from "../types";
-import {
-  getActiveBlockComponent,
-  getActiveBrickGeometry,
-  getActiveBrickRolloverComponent,
-} from "../blocks";
+import { getActiveBrickGeometry } from "../blocks";
 import { useEventListener } from "../hooks/useEventListener";
 import { Block } from "../components/Block";
+import { RolloverBlock } from "../components/RolloverBlock";
 
 const degToRadians = (deg: number) => {
   return (deg * Math.PI) / 180;
@@ -53,8 +50,6 @@ function Main() {
   const groundRef = useRef(null);
   const rolloverRef = useRef(null);
   const clicked = useMouseDown();
-
-  const RolloverBlock = getActiveBrickRolloverComponent(snap.pick);
 
   const { rolloverPosition } = useRolloverPosition(
     snap.mode === eMode.DRAW
@@ -139,8 +134,8 @@ function Main() {
           ></RolloverBlock>
         </React.Suspense>
       )}
-
       {blocks.map(({ position, rotation, ref, blockId, description }, id) => {
+  
         return (
           // @ts-ignore
           <Block
@@ -152,7 +147,6 @@ function Main() {
             clickedBlock={handleStateFromBlock}
             blockId={blockId}
             geometry={getActiveBrickGeometry(description)}
-         
           />
         );
       })}

@@ -9,7 +9,7 @@ export type State = {
 };
 
 const initState: State = {
-  mode: eMode.DRAW,
+  mode: eMode.IDLE,
   pick: ePick.CHAIR_1,
   selectedBlock: null,
 };

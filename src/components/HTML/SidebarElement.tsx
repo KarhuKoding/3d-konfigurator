@@ -5,14 +5,16 @@ import { tPick } from "../../types";
 
 import "./SidebarElement.scss";
 
-export const MeshPicker = ({ element }: { element: any }) => {
-  const handleClick = (pick: tPick) => {
-    state.pick = pick;
-  };
-
+export const SidebarElement = ({
+  element,
+  handleOnPick,
+}: {
+  element: any;
+  handleOnPick: any;
+}) => {
   return (
     <li
-      onClick={() => handleClick(element.description)}
+      onClick={() => handleOnPick(element.description)}
       // className={snap.pick === block.description ? "selected" : ""}
       className="sidebarElement__item"
     >

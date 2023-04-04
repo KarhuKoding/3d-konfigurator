@@ -125,17 +125,13 @@ function Main() {
     <>
       <Ground ref={groundRef}></Ground>
 
-      {snap.mode === eMode.DRAW && (
-        <React.Suspense fallback={null}>
-          {/* @ts-ignore  */}
-          <RolloverBlock
-            ref={rolloverRef}
-            geomerty={getActiveBrickGeometry(snap.pick)}
-          ></RolloverBlock>
-        </React.Suspense>
-      )}
+      <RolloverBlock
+        mode={snap.mode}
+        ref={rolloverRef}
+        geomerty={getActiveBrickGeometry(snap.pick)}
+      ></RolloverBlock>
+
       {blocks.map(({ position, rotation, ref, blockId, description }, id) => {
-  
         return (
           // @ts-ignore
           <Block

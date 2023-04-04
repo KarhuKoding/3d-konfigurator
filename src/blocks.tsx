@@ -3,12 +3,10 @@ import { Block } from "./components/Block";
 import { Table } from "./components/building-blocks/Table";
 import { Chair } from "./components/building-blocks/Chair";
 
-
 import ChairPreview from "./assets/chair.png";
 import TablePreview from "./assets/table.png";
 
 export const availableBlocks = [
-  // Chair 1
   {
     description: ePick.CHAIR_1,
     meta: {
@@ -16,9 +14,9 @@ export const availableBlocks = [
       price: "534,40",
       imgSrc: ChairPreview,
     },
-    geomerty: <Chair />,
+    geomerty: <boxGeometry args={[1, 1, 1]} />,
   },
-  // Table 1
+
   {
     description: ePick.TABLE_1,
     meta: {
@@ -26,7 +24,7 @@ export const availableBlocks = [
       price: "650,75",
       imgSrc: TablePreview,
     },
-    geomerty: <Table />,
+    geomerty: <boxGeometry args={[1, 2, 1]} />,
   },
 ];
 

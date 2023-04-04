@@ -81,11 +81,10 @@ export const Block = React.forwardRef<Ref, Props>(
           onPointerOut={() => setHover(false)}
           onClick={handeClick}
         >
-          <mesh
-            castShadow
-            geometry={table.nodes.Office_Desk005.geometry}
-            material={table.materials.OfficeTable}
-          />
+          <mesh castShadow>
+            <boxGeometry args={[1, 1, 1]} />
+            <meshStandardMaterial color="blue"></meshStandardMaterial>
+          </mesh>
         </group>
       </>
     );

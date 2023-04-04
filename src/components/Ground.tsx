@@ -23,7 +23,7 @@ export const Ground = React.forwardRef<Ref, Props>(({}, ref) => {
   });
   return (
     <>
-       <color attach="background" args={["#c4abc0"]} /> 
+      <color attach="background" args={["#c4abc0"]} />
       {/* <fog attach="fog" args={["#191920", 0, 15]} /> */}
       <mesh
         rotation={[-Math.PI / 2, 0, 0]}
@@ -32,7 +32,7 @@ export const Ground = React.forwardRef<Ref, Props>(({}, ref) => {
         receiveShadow
       >
         <planeGeometry args={[10, 5]} />
-        <MeshReflectorMaterial
+        {/* <MeshReflectorMaterial
           blur={[300, 100]}
           resolution={2048}
           mixBlur={1}
@@ -43,8 +43,9 @@ export const Ground = React.forwardRef<Ref, Props>(({}, ref) => {
           maxDepthThreshold={1.4}
           color="#050505"
           metalness={0.5}
-          mirror={0} 
-        />
+          mirror={0}
+        /> */}
+        <meshBasicMaterial color="black"></meshBasicMaterial>
       </mesh>
       <Grid position={[0, 0.01, 0]} args={gridSize} {...gridConfig} />
       <axesHelper args={[5]} />

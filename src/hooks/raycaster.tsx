@@ -30,13 +30,13 @@ export const useRolloverPosition = (
       if (mode === eMode.IDLE) return;
 
       // Exit early if references contain an undefined value
-      if (groundRef.current === null) {
+      if (groundRef && groundRef?.current === null) {
         console.warn("No component set for groundPlane");
         return;
       }
 
       // RolloverRef
-      if (ref.current === null) {
+      if (ref && ref?.current === null) {
         console.warn("No component set for rollover brick");
         return;
       }

@@ -14,7 +14,8 @@ export const availableBlocks = [
       price: "534,40",
       imgSrc: ChairPreview,
     },
-    geomerty: <boxGeometry args={[1, 1, 1]} />,
+    // geomerty: <boxGeometry args={[1, 1, 1]} />,
+    geomerty: <Chair />,
   },
 
   {
@@ -24,7 +25,8 @@ export const availableBlocks = [
       price: "650,75",
       imgSrc: TablePreview,
     },
-    geomerty: <boxGeometry args={[1, 2, 1]} />,
+    // geomerty: <boxGeometry args={[1, 2, 1]} />,
+    geomerty: <Table />,
   },
 ];
 

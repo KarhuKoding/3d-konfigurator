@@ -71,6 +71,7 @@ export const Block = React.forwardRef<Ref, Props>(
       }
     };
 
+
     return (
       <>
         <group
@@ -81,10 +82,7 @@ export const Block = React.forwardRef<Ref, Props>(
           onPointerOut={() => setHover(false)}
           onClick={handeClick}
         >
-          <mesh castShadow>
-            <boxGeometry args={[1, 1, 1]} />
-            <meshStandardMaterial color="blue"></meshStandardMaterial>
-          </mesh>
+          {geometry}
         </group>
       </>
     );

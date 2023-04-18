@@ -1,6 +1,35 @@
-import { useGLTF } from "@react-three/drei";
-import * as THREE from "three";
+import { Box } from "@mantine/core";
+import { useGLTF, useHelper } from "@react-three/drei";
+import { useThree, useFrame } from "@react-three/fiber";
+import { BoxHelper, Object3D } from "three";
 import { GLTF } from "three-stdlib";
+import React, { useEffect, useRef } from "react";
+
+type Helper = Object3D & { update: () => void; dispose: () => void };
+
+const useCustomBoxHelper = (ref: any) => {
+  const boxHelper = React.useRef<Helper>();
+  const scene = useThree((state: any) => state.scene);
+
+  React.useLayoutEffect(() => {
+    let currentHelper: any = undefined!;
+
+    if (ref && ref?.current) {
+      boxHelper.current = currentHelper = new BoxHelper(ref.current, "lime");
+    }
+    if (currentHelper) {
+      scene.add(currentHelper);
+      return () => {
+        boxHelper.current = undefined;
+        scene.remove(currentHelper);
+        currentHelper.dispose?.();
+      };
+    }
+  }, [scene, ref]);
+
+  useFrame(() => void boxHelper.current?.update?.());
+  return boxHelper;
+};
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -13,14 +42,21 @@ type GLTFResult = GLTF & {
 
 export function Chair(props: JSX.IntrinsicElements["group"]) {
   const { nodes, materials } = useGLTF("/chairGLTF.gltf") as GLTFResult;
+  const ref = useRef(null);
+
+   useCustomBoxHelper(ref);
+
+  //@ts-ignore
+  // useHelper(ref, BoxHelper, "green");
+
   return (
     <group {...props} dispose={null}>
       <mesh
+        ref={ref}
         castShadow
         geometry={nodes.Chair001.geometry}
         material={materials.Chair01}
-        position={[1.28, 0.03, 0.7]}
-        rotation={[0, -1.15, 0]}
+        position={[0, 0, 0]}    
       />
     </group>
   );

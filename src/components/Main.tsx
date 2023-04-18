@@ -17,6 +17,8 @@ import { getActiveBrickGeometry } from "../blocks";
 import { useEventListener } from "../hooks/useEventListener";
 import { Block } from "../components/Block";
 import { RolloverBlock } from "../components/RolloverBlock";
+import * as THREE from "three";
+import { log } from "console";
 
 const degToRadians = (deg: number) => {
   return (deg * Math.PI) / 180;
@@ -46,90 +48,99 @@ function Main() {
 
   const [blocks, setBlocks] = useState<tBlock[]>(initBlocks);
   const [rotation, setRotation] = useState<number>(45);
+  const [isDragging, setIsDragging] = useState(false);
+
+  const floorPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
 
   const groundRef = useRef(null);
   const rolloverRef = useRef(null);
   const clicked = useMouseDown();
 
-  const { rolloverPosition } = useRolloverPosition(
-    snap.mode === eMode.DRAW
-      ? rolloverRef
-      : blocks
-          .filter((block) => block.selected === true)
-          .filter(({ ref }) => ref.current)
-          .map(({ ref }) => ref)[0],
-    groundRef,
-
-    snap.mode
-  );
-
   useEffect(() => {
-    if (clicked && snap.mode === eMode.DRAW) {
-      setTimeout(() => {
-        const newBlock = {
-          position: { ...rolloverPosition },
-          ref: createRef(),
-          selected: false,
-          blockId: blocks.length + 1,
-          description: snap.pick,
-          rotation: { x: 0, y: degToRadians(rotation - 45), z: 0 },
-        };
+    state.isDragging = isDragging;
+  }, [isDragging]);
 
-        setBlocks([...blocks, newBlock]);
-        setRotation(45);
-        state.mode = eMode.IDLE;
-      }, 50);
-    }
-    if (clicked && snap.mode === eMode.PICK) {
-      // TODO add case for relocate an Item
-      const newState = blocks.map((block) => {
-        return { ...block, selected: false };
-      });
-      setBlocks(newState);
-    }
-  }, [clicked, snap, state, rotation]);
+  // const { rolloverPosition } = useRolloverPosition(
+  //   snap.mode === eMode.DRAW
+  //     ? rolloverRef
+  //     : blocks
+  //         .filter((block) => block.selected === true)
+  //         .filter(({ ref }) => ref.current)
+  //         .map(({ ref }) => ref)[0],
+  //   groundRef,
 
-  const handler = useCallback(
-    ({ code }: { code: string }) => {
-      if (code === "Space" && snap.mode === eMode.DRAW && rolloverRef.current) {
-        setRotation((prev) => {
-          if (prev === 360) {
-            return 45;
-          }
-          return prev + 45;
-        });
-        // @ts-ignore
-        rolloverRef.current.rotation.y = degToRadians(rotation);
-      }
+  //   snap.mode
+  // );
 
-      // TODO add case to update the rotation of an Picked Item
-      return;
-    },
-    [snap.mode, rotation, setRotation, rolloverRef]
-  );
+  // useEffect(() => {
+  //   if (clicked && snap.mode === eMode.DRAW) {
+  //     setTimeout(() => {
+  //       const newBlock = {
+  //         position: { ...rolloverPosition },
+  //         ref: createRef(),
+  //         selected: false,
+  //         blockId: blocks.length + 1,
+  //         description: snap.pick,
+  //         rotation: { x: 0, y: degToRadians(rotation - 45), z: 0 },
+  //       };
 
-  useEventListener("keydown", handler);
+  //       setBlocks([...blocks, newBlock]);
+  //       setRotation(45);
+  //       state.mode = eMode.IDLE;
+  //     }, 50);
+  //   }
+  //   if (clicked && snap.mode === eMode.PICK) {
+  //     // TODO add case for relocate an Item
+  //     const newState = blocks.map((block) => {
+  //       return { ...block, selected: false };
+  //     });
+  //     setBlocks(newState);
+  //   }
+  // }, [clicked, snap, state, rotation]);
 
-  const handleStateFromBlock = (id: any) => {
-    const selectedBlock = blocks.filter((block) => block.selected === true);
-    // Only one Block at the time should be selectable
-    if (selectedBlock.length === 0) {
-      const newState = blocks.map((block) => {
-        return block.blockId === id ? { ...block, selected: true } : block;
-      });
-      setBlocks(newState);
-    }
-  };
+  // const handler = useCallback(
+  //   ({ code }: { code: string }) => {
+  //     if (code === "Space" && snap.mode === eMode.DRAW && rolloverRef.current) {
+  //       setRotation((prev) => {
+  //         if (prev === 360) {
+  //           return 45;
+  //         }
+  //         return prev + 45;
+  //       });
+  //       // @ts-ignore
+  //       rolloverRef.current.rotation.y = degToRadians(rotation);
+  //     }
+
+  //     // TODO add case to update the rotation of an Picked Item
+  //     return;
+  //   },
+  //   [snap.mode, rotation, setRotation, rolloverRef]
+  // );
+
+  // useEventListener("keydown", handler);
+
+  // const handleStateFromBlock = (id: any) => {
+  //   const selectedBlock = blocks.filter((block) => block.selected === true);
+  //   // Only one Block at the time should be selectable
+  //   if (selectedBlock.length === 0) {
+  //     const newState = blocks.map((block) => {
+  //       return block.blockId === id ? { ...block, selected: true } : block;
+  //     });
+  //     setBlocks(newState);
+  //   }
+  // };
 
   return (
     <>
       <Ground ref={groundRef}></Ground>
+      {/* @ts-ignore */}
+      <planeHelper args={[floorPlane, 5, "red"]} />
 
-      <RolloverBlock
+      {/* <RolloverBlock
         mode={snap.mode}
         ref={rolloverRef}
         geomerty={getActiveBrickGeometry(snap.pick)}
-      ></RolloverBlock>
+      ></RolloverBlock> */}
 
       {blocks.map(({ position, rotation, ref, blockId, description }, id) => {
         return (
@@ -140,9 +151,12 @@ function Main() {
             ref={ref}
             key={id}
             color="blue"
-            clickedBlock={handleStateFromBlock}
+            // clickedBlock={handleStateFromBlock}
             blockId={blockId}
             geometry={getActiveBrickGeometry(description)}
+            //@ts-ignore
+            setIsDragging={setIsDragging}
+            floorPlane={floorPlane}
           />
         );
       })}

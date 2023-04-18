@@ -1,3 +1,5 @@
+// Legacy COde, Raycaster is now Handled with use-guesture
+
 import { useThree } from "@react-three/fiber";
 import React, { useEffect, useState } from "react";
 import * as THREE from "three";

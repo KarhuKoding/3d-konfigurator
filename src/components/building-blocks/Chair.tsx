@@ -19,15 +19,13 @@ export function Chair(props: JSX.IntrinsicElements["group"]) {
   useCustomBoxHelper(ref);
 
   return (
-    <group {...props} dispose={null}>
-      <mesh
-        ref={ref}
-        castShadow
-        geometry={nodes.Chair001.geometry}
-        material={materials.Chair01}
-        position={[0, 0, 0]}
-      />
-    </group>
+    <mesh
+      ref={ref}
+      castShadow
+      geometry={nodes.Chair001.geometry}
+      material={materials.Chair01}
+      position={[0, 0, 0]}
+    />
   );
 }
 

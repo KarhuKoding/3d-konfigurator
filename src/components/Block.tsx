@@ -1,14 +1,13 @@
-import React, { useEffect, useState, createRef } from "react";
+import { animated, useSpring } from "@react-spring/three";
+import { useGLTF } from "@react-three/drei";
+import { useThree } from "@react-three/fiber";
+import { useDrag } from "@use-gesture/react";
+import React, { useRef, useState } from "react";
+import * as THREE from "three";
+import { GLTF } from "three-stdlib";
 import { useSnapshot } from "valtio";
 import { state } from "../store/store";
 import { eMode } from "../types";
-import { Edges } from "@react-three/drei";
-import { useGLTF, useHelper } from "@react-three/drei";
-import { GLTF } from "three-stdlib";
-import { BoxHelper, Object3D } from "three";
-import { useThree } from "@react-three/fiber";
-import * as THREE from "three";
-import { Falsey } from "utility-types";
 
 interface Props {
   position: [x: number, y: number, z: number];
@@ -17,6 +16,8 @@ interface Props {
   clickedBlock: Function;
   blockId: number;
   geometry: any;
+  setIsDragging: any;
+  floorPlane: any;
 }
 type Ref = any;
 
@@ -31,7 +32,17 @@ type GLTFResult = GLTF & {
 
 export const Block = React.forwardRef<Ref, Props>(
   (
-    { position, rotation, color = "blue", clickedBlock, blockId, geometry },
+    //@ts-ignore
+    {
+      position,
+      rotation,
+      color = "blue",
+      clickedBlock,
+      blockId,
+      geometry,
+      setIsDragging,
+      floorPlane,
+    },
     ref
   ) => {
     const table = useGLTF("/table.gltf") as GLTFResult;
@@ -43,15 +54,21 @@ export const Block = React.forwardRef<Ref, Props>(
     const snap = useSnapshot(state);
 
     const handeClick = () => {
-      if (snap.mode === eMode.PICK) {
-        state.mode = eMode.IDLE;
-      }
+      // if (snap.mode === eMode.PICK) {
+      //   state.mode = eMode.IDLE;
+      // }
+      // clickedBlock(blockId);
+    };
+
+    const handlePointerUp = () => {
       if (snap.mode === eMode.IDLE) {
         // Set State to PICK
         state.mode = eMode.PICK;
-        clickedBlock(blockId);
+        // clickedBlock(blockId);
       }
     };
+
+    const handlePointerDown = () => {};
 
     // useEffect(() => {
     //   //@ts-ignore
@@ -71,19 +88,66 @@ export const Block = React.forwardRef<Ref, Props>(
       }
     };
 
+    const [pos, setPos] = useState([0, 1, 0]);
+    const { size, viewport } = useThree();
+    const aspect = size.width / viewport.width;
+
+    let planeIntersectPoint = new THREE.Vector3();
+
+    const dragObjectRef = useRef();
+
+    const [spring, api] = useSpring(() => ({
+      // position: [0, 0, 0],
+      position: pos,
+      scale: 1,
+      rotation: [0, 0, 0],
+      config: { friction: 10 },
+    }));
+
+    const bind = useDrag(
+      ({ active, movement: [x, y], timeStamp, event }) => {
+        if (active) {
+          console.log(floorPlane);
+          //@ts-ignore
+          event.ray.intersectPlane(floorPlane, planeIntersectPoint);
+          setPos([planeIntersectPoint.x, 1.5, planeIntersectPoint.z]);
+        }
+
+        setIsDragging(active);
+
+        api.start({
+          // position: active ? [x / aspect, -y / aspect, 0] : [0, 0, 0],
+          position: pos,
+          scale: active ? 1.2 : 1,
+        });
+        return timeStamp;
+      },
+      { delay: true }
+    );
 
     return (
       <>
-        <group
+        {/* <group
           position={[x, y, z]}
           rotation={[rx, ry, rz]}
           ref={ref}
           onPointerOver={() => setHover(true)}
           onPointerOut={() => setHover(false)}
-          onClick={handeClick}
-        >
-          {geometry}
-        </group>
+            onClick={handeClick}
+           onPointerDown={handlePointerUp}
+          onPointerUp={handlePointerDown}
+        > */}
+        {/* @ts-ignore */}
+        <animated.mesh {...spring} {...bind()}>
+          {/* {geometry} */}
+
+          <dodecahedronBufferGeometry
+            ref={dragObjectRef}
+            attach="geometry"
+            args={[1.4, 0]}
+          />
+        </animated.mesh>
+        {/* </group> */}
       </>
     );
   }

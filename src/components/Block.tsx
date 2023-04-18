@@ -9,6 +9,7 @@ import { BoxHelper, Object3D } from "three";
 import { useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import { Falsey } from "utility-types";
+import { Demo } from "./Helpers/UI/HTMLAnnotation";
 
 interface Props {
   position: [x: number, y: number, z: number];
@@ -36,6 +37,8 @@ export const Block = React.forwardRef<Ref, Props>(
   ) => {
     const table = useGLTF("/table.gltf") as GLTFResult;
     const scene = useThree((state) => state.scene);
+    // TODO sync with gloabl state
+    const [annotationVisible, setAnnotation] = useState(false);
 
     const [x, y, z] = position;
     const [rx, ry, rz] = rotation;
@@ -43,10 +46,12 @@ export const Block = React.forwardRef<Ref, Props>(
     const snap = useSnapshot(state);
 
     const handeClick = () => {
+      console.log("click");
       if (snap.mode === eMode.PICK) {
         state.mode = eMode.IDLE;
       }
       if (snap.mode === eMode.IDLE) {
+        setAnnotation(true);
         // Set State to PICK
         state.mode = eMode.PICK;
         clickedBlock(blockId);
@@ -71,7 +76,6 @@ export const Block = React.forwardRef<Ref, Props>(
       }
     };
 
-
     return (
       <>
         <group
@@ -83,6 +87,7 @@ export const Block = React.forwardRef<Ref, Props>(
           onClick={handeClick}
         >
           {geometry}
+          <Demo open={annotationVisible} setOpened={setAnnotation} />
         </group>
       </>
     );

@@ -68,7 +68,7 @@ function App() {
           </div>
         )} */}
 
-        <Sidebar />
+        {/* <Sidebar /> */}
         <section className="canvasWrapper">
           <Canvas camera={{ position: [2.5, 4, 7] }}>
             <pointLight position={[10, 10, 10]} />

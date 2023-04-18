@@ -14,6 +14,7 @@ type GLTFResult = GLTF & {
 
 export function Chair(props: JSX.IntrinsicElements["group"]) {
   const { nodes, materials } = useGLTF("/chairGLTF.gltf") as GLTFResult;
+
   const ref = useRef(null);
 
   useCustomBoxHelper(ref);

@@ -6,12 +6,14 @@ export type State = {
   mode: tMode;
   pick: tPick;
   selectedBlock: any;
+  isDragging: boolean;
 };
 
 const initState: State = {
   mode: eMode.IDLE,
   pick: ePick.CHAIR_1,
   selectedBlock: null,
+  isDragging: false,
 };
 
 const state = proxy({

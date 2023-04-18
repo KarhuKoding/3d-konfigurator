@@ -94,23 +94,32 @@ export const Block = React.forwardRef<Ref, Props>(
 
     let planeIntersectPoint = new THREE.Vector3();
 
-    const dragObjectRef = useRef();
+    const dragObjectRef = ref;
 
     const [spring, api] = useSpring(() => ({
       // position: [0, 0, 0],
       position: pos,
       scale: 1,
       rotation: [0, 0, 0],
-      config: { friction: 10 },
+      // config: { friction: 100 },
     }));
 
     const bind = useDrag(
       ({ active, movement: [x, y], timeStamp, event }) => {
         if (active) {
-          console.log(floorPlane);
+          // console.log(floorPlane);
           //@ts-ignore
           event.ray.intersectPlane(floorPlane, planeIntersectPoint);
-          setPos([planeIntersectPoint.x, 1.5, planeIntersectPoint.z]);
+
+          const position = new THREE.Vector3(
+            //@ts-ignore
+            planeIntersectPoint.x.toFixed(2) * 1,
+            0,
+            //@ts-ignore
+            planeIntersectPoint.z.toFixed(2) * 1
+          );
+
+          setPos([position.x, 0, position.z]);
         }
 
         setIsDragging(active);
@@ -118,7 +127,7 @@ export const Block = React.forwardRef<Ref, Props>(
         api.start({
           // position: active ? [x / aspect, -y / aspect, 0] : [0, 0, 0],
           position: pos,
-          scale: active ? 1.2 : 1,
+          scale: active ? 1.1 : 1,
         });
         return timeStamp;
       },
@@ -139,13 +148,7 @@ export const Block = React.forwardRef<Ref, Props>(
         > */}
         {/* @ts-ignore */}
         <animated.mesh {...spring} {...bind()}>
-          {/* {geometry} */}
-
-          <dodecahedronBufferGeometry
-            ref={dragObjectRef}
-            attach="geometry"
-            args={[1.4, 0]}
-          />
+          {geometry}
         </animated.mesh>
         {/* </group> */}
       </>

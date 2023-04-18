@@ -4,12 +4,14 @@ import Sidebar from "./components/HTML/Sidebar";
 import { useEventListener } from "./hooks/useEventListener";
 import MainGround from "./components/Main";
 import { OrbitControls } from "@react-three/drei";
-
+import { useSnapshot } from "valtio";
+import { state } from "./store/store";
 import "./index.scss";
 
 function App() {
   const [showOverlay, setShowOverlay] = useState(false);
   const [selection, setSelection] = useState(null);
+  const snap = useSnapshot(state);
 
   const playAudio = () => {
     if (selection === null) return;
@@ -73,7 +75,7 @@ function App() {
           <Canvas camera={{ position: [2.5, 4, 7] }}>
             <pointLight position={[10, 10, 10]} />
             <MainGround />
-            <OrbitControls></OrbitControls>
+            <OrbitControls enabled={!snap.isDragging}></OrbitControls>
           </Canvas>
         </section>
       </div>

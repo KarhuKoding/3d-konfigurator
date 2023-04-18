@@ -18,6 +18,7 @@ import { useEventListener } from "../hooks/useEventListener";
 import { Block } from "../components/Block";
 import { RolloverBlock } from "../components/RolloverBlock";
 import * as THREE from "three";
+import { log } from "console";
 
 const degToRadians = (deg: number) => {
   return (deg * Math.PI) / 180;
@@ -54,6 +55,10 @@ function Main() {
   const groundRef = useRef(null);
   const rolloverRef = useRef(null);
   const clicked = useMouseDown();
+
+  useEffect(() => {
+    state.isDragging = isDragging;
+  }, [isDragging]);
 
   // const { rolloverPosition } = useRolloverPosition(
   //   snap.mode === eMode.DRAW
@@ -127,7 +132,7 @@ function Main() {
 
   return (
     <>
-      {/* <Ground ref={groundRef}></Ground> */}
+      <Ground ref={groundRef}></Ground>
       {/* @ts-ignore */}
       <planeHelper args={[floorPlane, 5, "red"]} />
 
@@ -150,7 +155,7 @@ function Main() {
             blockId={blockId}
             geometry={getActiveBrickGeometry(description)}
             //@ts-ignore
-            setIsDragging={setIsDragging} 
+            setIsDragging={setIsDragging}
             floorPlane={floorPlane}
           />
         );

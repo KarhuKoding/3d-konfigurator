@@ -88,7 +88,7 @@ export const Block = React.forwardRef<Ref, Props>(
       }
     };
 
-    const [pos, setPos] = useState([0, 1, 0]);
+    const [pos, setPos] = useState([...position]);
     const { size, viewport } = useThree();
     const aspect = size.width / viewport.width;
 

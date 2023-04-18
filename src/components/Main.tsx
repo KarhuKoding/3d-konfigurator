@@ -33,14 +33,14 @@ const initBlocks: tBlock[] = [
     blockId: 0,
     description: ePick.CHAIR_1,
   },
-  // {
-  //   position: { x: 2, y: 0, z: 0 },
-  //   rotation: { x: 0, y: 0, z: 0 },
-  //   ref: createRef(),
-  //   selected: false,
-  //   blockId: 1,
-  //   description: ePick.TABLE_1,
-  // },
+  {
+    position: { x: 2, y: 0, z: 0 },
+    rotation: { x: 0, y: 0, z: 0 },
+    ref: createRef(),
+    selected: false,
+    blockId: 1,
+    description: ePick.TABLE_1,
+  },
 ];
 
 function Main() {

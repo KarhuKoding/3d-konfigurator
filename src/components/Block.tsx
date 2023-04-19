@@ -8,17 +8,8 @@ import { GLTF } from "three-stdlib";
 import { useSnapshot } from "valtio";
 import { state } from "../store/store";
 import { eMode } from "../types";
-<<<<<<< HEAD
-import { Edges } from "@react-three/drei";
-import { useGLTF, useHelper } from "@react-three/drei";
-import { GLTF } from "three-stdlib";
-import { BoxHelper, Object3D } from "three";
-import { useThree } from "@react-three/fiber";
-import * as THREE from "three";
-import { Falsey } from "utility-types";
-import { Demo } from "./Helpers/UI/HTMLAnnotation";
-=======
->>>>>>> updateForModelMovement
+import { HTMLAnnotation } from "./Helpers/UI/HTMLAnnotation";
+import { log } from "console";
 
 interface Props {
   position: [x: number, y: number, z: number];
@@ -59,30 +50,24 @@ export const Block = React.forwardRef<Ref, Props>(
     const table = useGLTF("/table.gltf") as GLTFResult;
     const scene = useThree((state) => state.scene);
     // TODO sync with gloabl state
-    const [annotationVisible, setAnnotation] = useState(false);
+    // const [annotationVisible, setAnnotation] = useState(false);
 
     const [x, y, z] = position;
     const [rx, ry, rz] = rotation;
     const [hovered, setHover] = useState<null | Boolean>(null);
+    const [clicked, setClicked] = useState<Boolean>(false);
     const snap = useSnapshot(state);
 
     const handeClick = () => {
-<<<<<<< HEAD
-      console.log("click");
+      setClicked(true);
+      // console.log(annotationVisible);
+      // if (!annotationVisible) {
+      //   setAnnotation(true);
+      // }
       if (snap.mode === eMode.PICK) {
         state.mode = eMode.IDLE;
       }
-=======
-      // if (snap.mode === eMode.PICK) {
-      //   state.mode = eMode.IDLE;
-      // }
-      // clickedBlock(blockId);
-    };
-
-    const handlePointerUp = () => {
->>>>>>> updateForModelMovement
       if (snap.mode === eMode.IDLE) {
-        setAnnotation(true);
         // Set State to PICK
         state.mode = eMode.PICK;
         // clickedBlock(blockId);
@@ -109,8 +94,6 @@ export const Block = React.forwardRef<Ref, Props>(
       }
     };
 
-<<<<<<< HEAD
-=======
     const [pos, setPos] = useState([...position]);
     const { size, viewport } = useThree();
     const aspect = size.width / viewport.width;
@@ -129,7 +112,7 @@ export const Block = React.forwardRef<Ref, Props>(
 
     const bind = useDrag(
       ({ active, movement: [x, y], timeStamp, event }) => {
-        if (active) {
+        if (active && Math.abs(x) > 0.5 && Math.abs(y) > 0.5) {
           // console.log(floorPlane);
           //@ts-ignore
           event.ray.intersectPlane(floorPlane, planeIntersectPoint);
@@ -157,29 +140,13 @@ export const Block = React.forwardRef<Ref, Props>(
       { delay: true }
     );
 
->>>>>>> updateForModelMovement
     return (
       <>
-        {/* <group
-          position={[x, y, z]}
-          rotation={[rx, ry, rz]}
-          ref={ref}
-          onPointerOver={() => setHover(true)}
-          onPointerOut={() => setHover(false)}
-            onClick={handeClick}
-           onPointerDown={handlePointerUp}
-          onPointerUp={handlePointerDown}
-        > */}
         {/* @ts-ignore */}
-        <animated.mesh {...spring} {...bind()}>
+        <animated.mesh {...spring} {...bind()} onClick={handeClick}>
           {geometry}
-<<<<<<< HEAD
-          <Demo open={annotationVisible} setOpened={setAnnotation} />
-        </group>
-=======
+          <HTMLAnnotation clicked={clicked}/>
         </animated.mesh>
-        {/* </group> */}
->>>>>>> updateForModelMovement
       </>
     );
   }

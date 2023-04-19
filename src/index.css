@@ -1,4 +1,7 @@
 @import url("https://fonts.cdnfonts.com/css/config-condensed");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 * {
   box-sizing: border-box;
@@ -52,13 +55,10 @@ body {
 .sidebarWrapper {
   flex: 0.2 1 250px;
   height: 100%;
-
-  ul {
-    li {
-      cursor: pointer;
-    }
-    .selected {
-      color: blue;
-    }
-  }
+}
+.sidebarWrapper ul li {
+  cursor: pointer;
+}
+.sidebarWrapper ul .selected {
+  color: blue;
 }

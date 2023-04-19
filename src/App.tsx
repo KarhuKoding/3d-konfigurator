@@ -6,7 +6,7 @@ import MainGround from "./components/Main";
 import { OrbitControls } from "@react-three/drei";
 import { useSnapshot } from "valtio";
 import { state } from "./store/store";
-import "./index.scss";
+import "./index.css";
 
 function App() {
   const [showOverlay, setShowOverlay] = useState(false);

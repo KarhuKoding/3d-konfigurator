@@ -1,36 +1,49 @@
-import { Popover, Text, Button } from "@mantine/core";
-import {
-  useGLTF,
-  PresentationControls,
-  Environment,
-  ContactShadows,
-  Html,
-} from "@react-three/drei";
+import { Popover } from "@mantine/core";
+import { Html } from "@react-three/drei";
+import { FiRotateCcw, FiTrash2 } from "react-icons/fi";
+import { useEffect, useState } from "react";
+import "./Annotation.scss";
 
-export function Demo(props: { open: boolean; setOpened: any }) {
+const ActionMenue = () => {
   return (
-    <Html
-      scale={1}
-      rotation={[0, 0, 0]}
-      position={[0, 0, 0]}
-      //  transform
-      // occlude
-    >
+    <div>
+      <div className="flex flex-row">
+        <FiRotateCcw />
+        <p>Rotate</p>
+      </div>
+      <div className="flex flex-row">
+        <FiTrash2 />
+        <p>Delete</p>
+      </div>
+    </div>
+  );
+};
+
+export function HTMLAnnotation(props: { clicked: Boolean }) {
+  // const { open, setOpened } = props;
+  // console.log(props.ref);
+  const [opened, setOpened] = useState(false);
+  useEffect(() => {
+    console.log(opened);
+    // @ts-ignore
+    setOpened(props.clicked);
+  }, [props.clicked, opened]);
+
+  return (
+    <Html scale={1} rotation={[0, 0, 0]} position={[0, 0, 0]}>
       <Popover
         width={200}
-        position="bottom"
+        position="right"
         withArrow
-        opened={props.open}
-        onChange={props.setOpened}
+        opened={opened}
+        onChange={setOpened}
+        closeOnEscape
       >
         <Popover.Target>
-          {/* <Button>Toggle popover</Button> */}
           <div></div>
         </Popover.Target>
         <Popover.Dropdown>
-          <Text size="sm">
-            This is uncontrolled popover, it is opened when button is clicked
-          </Text>
+          <ActionMenue />
         </Popover.Dropdown>
       </Popover>
     </Html>
